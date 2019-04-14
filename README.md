@@ -6,5 +6,8 @@ A MIPS interpreter written in Python
 
 Example code courtesy of [University Of The Pacific]
 
-[university of the pacific]: (https://ecs-network.serv.pacific.edu/ecpe-170/tutorials/mips-example-programs)
-[ref]: (http://www-ee.eng.hawaii.edu/~sasaki/EE361/Fall99/ChrisChan/Report.html#3.0)
+[mips ref sheet]
+
+[university of the pacific]: https://ecs-network.serv.pacific.edu/ecpe-170/tutorials/mips-example-programs
+[ref]: http://www-ee.eng.hawaii.edu/~sasaki/EE361/Fall99/ChrisChan/Report.html#3.0
+[mips ref sheet]: https://inst.eecs.berkeley.edu/~cs61c/resources/MIPS_help.html

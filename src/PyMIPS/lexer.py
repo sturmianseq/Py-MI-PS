@@ -9,18 +9,20 @@ REGISTER = "REGISTER"
 REFERENCE = "REFERENCE"
 INT = "INT"
 SEPERATOR = "SEPERATOR"
+STRING = "STRING"
 
-commands = [r"li", r"lw", r"add", r"sub", r"sw", r"syscall"]
+commands = [r"li", r"lw", r"add", r"sub", r"sw", r"syscall", r"la", r"move"]
 registers = [r"[$][^\s,]+"]
 
 
 token_exprs = (
     [
-        (r"[\n\r]+", NEWLINE),
+        (r"[\n\r]+", None),
         (r"[\s]+", None),
         (r"[#]+[^\n]+", None),
         (r"[.][^\s\n]+", DIRECTIVE),
-        (r".+[:]", LABEL),
+        (r"[^\s]+[:]", LABEL),
+        (r'".+"', STRING),
     ]
     + [(c, COMMAND) for c in commands]
     + [(r"[,]", SEPERATOR)]

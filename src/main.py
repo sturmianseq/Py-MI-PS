@@ -10,6 +10,4 @@ if __name__ == "__main__":
     tokens = lex(characters)
     print(tokens)
     print("\n\n")
-    ast = parser()(tokens, 0)
-    print(ast)
 

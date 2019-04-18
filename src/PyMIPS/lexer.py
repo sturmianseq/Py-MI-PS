@@ -54,7 +54,11 @@ commands = [
     r"msub",
     r"msubu", r"mthi", r"mtlo", 
     r"mul",
-    r"mult", r"nop", r"", r"",
+    r"mult", r"nop", r"nor", r"or",
+    r"ori", r"sb", r"sc", r"sh",
+    r"sll", r"sllv", r"slt", r"slti",
+    r"", r"", r"", r"",
+    r"", r"", r"", r"",
 ]
 registers = [r"[$][^\s,]+"]
 

@@ -3,38 +3,35 @@ from PyMIPS.parser import *
 
 
 class I_Type:
-    def __init__(self, command, register, immediate):
+    def __init__(self, command, target_register, source_register=None, immediate=None):
         self.command = command
-        self.register = register
+        self.target_register = target_register
+        self.source_register = source_register
         self.immediate = immediate
 
     def __repr__(self):
-        return f"I_Type({self.command} {self.register}, {self.immediate})"
+        return f"I_Type({self.command} {self.target_register}, {self.source_register}, {self.immediate})"
 
 
 class R_Type:
-    def __init__(self, command, destination, r1, r2):
+    def __init__(self, command, destination, r1=None, r2=None, shift_amount=0):
         self.command = command
         self.destination = destination
         self.r1 = r1
         self.r2 = r2
+        self.shift_amount = shift_amount
 
     def __repr__(self):
         return f"R_Type({self.command} {self.destination}, {self.r1}, {self.r2})"
 
 
-class Move:
-    def __init__(self, dest, src):
-        self.dest = dest
-        self.src = src
+class J_Type:
+    def __init__(self, command, address):
+        self.command = command
+        self.address = address
 
     def __repr__(self):
-        return f"MOVE {self.dest} <- {self.src}"
-
-
-class Syscall:
-    def __repr__(self):
-        return "SYSCALL"
+        return f"{self.command}({self.address})"
 
 
 # Defs
@@ -70,23 +67,5 @@ def r_type():
     )
 
 
-def move_type():
-    def process(parsed):
-        (((_, d), _), s) = parsed
-        return Move(d, s)
-
-    return (
-        Reserved("move", COMMAND) + Tag(REGISTER) + Tag(SEPERATOR) + Tag(REGISTER)
-        ^ process
-    )
-
-
-def syscall():
-    def process(parsed):
-        return Syscall()
-
-    return Reserved("syscall", COMMAND) ^ process
-
-
 def command_list():
-    return i_type() | i_type_with_ref() | r_type() | syscall() | move_type()
+    return i_type() | i_type_with_ref() | r_type()

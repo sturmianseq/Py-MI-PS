@@ -9,6 +9,7 @@ REGISTER = "REGISTER"
 REFERENCE = "REFERENCE"
 INT = "INT"
 SEPERATOR = "SEPERATOR"
+PAREN = "PAREN"
 STRING = "STRING"
 
 commands = [
@@ -110,6 +111,7 @@ token_exprs = (
     ]
     + [(c, COMMAND) for c in commands]
     + [(r"[,]", SEPERATOR)]
+    + [(r"[()]", PAREN)]
     + [(r, REGISTER) for r in registers]
     + [(r"[+-]?\d+", INT), (r"[A-Za-z][A-Za-z0-9_]*", REFERENCE)]
 )

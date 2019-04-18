@@ -18,7 +18,6 @@ commands = [
     r"sw",
     r"syscall",
     r"la",
-    r"move",
     r"addi",
     r"addiu",
     r"addu",
@@ -51,8 +50,11 @@ commands = [
     r"lwr",
     r"madd",
     r"maddu",
-    r"mfhi", r"mflo", r"", r"",
-    r"", r"", r"", r"",
+    r"mfhi", r"mflo", r"move", 
+    r"msub",
+    r"msubu", r"mthi", r"mtlo", 
+    r"mul",
+    r"mult", r"nop", r"", r"",
 ]
 registers = [r"[$][^\s,]+"]
 

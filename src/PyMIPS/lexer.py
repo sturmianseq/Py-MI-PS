@@ -49,8 +49,10 @@ commands = [
     r"lw",
     r"lwl",
     r"lwr",
-    r"",
-    r"",
+    r"madd",
+    r"maddu",
+    r"mfhi", r"mflo", r"", r"",
+    r"", r"", r"", r"",
 ]
 registers = [r"[$][^\s,]+"]
 

@@ -35,7 +35,10 @@ commands = [
     r"break",
     r"div",
     r"divu",
-    r"eret", r"", r"", r"",
+    r"eret",
+    r"",
+    r"",
+    r"",
 ]
 registers = [r"[$][^\s,]+"]
 

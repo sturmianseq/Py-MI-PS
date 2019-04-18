@@ -94,9 +94,7 @@ commands = [
     r"tnei",
     r"xor",
     r"xori",
-    # Extended Instructions
-    r"",
-    r"",
+    r"abs",
 ]
 registers = [r"[$][^\s,]+"]
 

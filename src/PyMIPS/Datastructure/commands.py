@@ -1,4 +1,4 @@
-from PyMIPS.AST.commands import I_Type
+from PyMIPS.AST.classes import I_Type
 from PyMIPS.Datastructure.register import RegisterPool
 
 

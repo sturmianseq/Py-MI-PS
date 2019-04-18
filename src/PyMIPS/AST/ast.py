@@ -1,5 +1,5 @@
 from PyMIPS.AST.blocks import *
-from PyMIPS.AST.commands import *
+from PyMIPS.AST.classes import *
 from PyMIPS.AST.data import *
 
 

@@ -1,7 +1,7 @@
 class Register:
     def __init__(self, name):
         self.name = name
-        self.__contents = 0
+        self.__contents = lambda: 0
 
     def __repr__(self):
         return f"Register({self.name}, {str(self.__contents)})"
@@ -10,7 +10,7 @@ class Register:
         self.__contents = value
 
     def get_contents(self):
-        return self.__contents
+        return self.__contents()
 
 
 class RegisterPool:

@@ -111,7 +111,7 @@ token_exprs = (
     + [(c, COMMAND) for c in commands]
     + [(r"[,]", SEPERATOR)]
     + [(r, REGISTER) for r in registers]
-    + [(r"[0-9]+", INT), (r"[A-Za-z][A-Za-z0-9_]*", REFERENCE)]
+    + [(r"[+-]?\d+", INT), (r"[A-Za-z][A-Za-z0-9_]*", REFERENCE)]
 )
 
 

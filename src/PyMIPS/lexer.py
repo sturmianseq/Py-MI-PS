@@ -12,6 +12,7 @@ SEPERATOR = "SEPERATOR"
 STRING = "STRING"
 
 commands = [
+    # Basic Instructions
     r"li",
     r"la",
     r"add",
@@ -79,6 +80,23 @@ commands = [
     r"swl",
     r"slr",
     r"syscall",
+    r"teq",
+    r"teqi",
+    r"tge",
+    r"tgei",
+    r"tgeiu",
+    r"tgeu",
+    r"tlt",
+    r"tlti",
+    r"tltiu",
+    r"tltu",
+    r"tne",
+    r"tnei",
+    r"xor",
+    r"xori",
+    # Extended Instructions
+    r"",
+    r"",
 ]
 registers = [r"[$][^\s,]+"]
 

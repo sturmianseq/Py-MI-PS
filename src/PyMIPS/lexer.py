@@ -25,9 +25,17 @@ commands = [
     r"addu",
     r"and",
     r"andi",
-    r"bc1f",
-    r"bc1t",
-    r"",
+    r"beq",
+    r"bgez",
+    r"bgezal",
+    r"bgtz",
+    r"blez",
+    r"bltz",
+    r"bltzal" r"bne",
+    r"break",
+    r"div",
+    r"divu",
+    r"eret", r"", r"", r"",
 ]
 registers = [r"[$][^\s,]+"]
 

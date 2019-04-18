@@ -13,7 +13,6 @@ STRING = "STRING"
 
 commands = [
     r"li",
-    r"lw",
     r"add",
     r"sub",
     r"sw",
@@ -36,7 +35,19 @@ commands = [
     r"div",
     r"divu",
     r"eret",
-    r"",
+    r"j",
+    r"jal",
+    r"jalr",
+    r"jr",
+    r"lb",
+    r"lbu",
+    r"lh",
+    r"lhu",
+    r"ll",
+    r"lui",
+    r"lw",
+    r"lwl",
+    r"lwr",
     r"",
     r"",
 ]

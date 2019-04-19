@@ -1,5 +1,4 @@
 from PyMIPS.lexer import *
-from PyMIPS.parser import *
 
 
 class I_Type:
@@ -33,39 +32,3 @@ class J_Type:
     def __repr__(self):
         return f"{self.command}({self.address})"
 
-
-# Defs
-def i_type():
-    def process(parsed):
-        (((c, r), _), i) = parsed
-        return I_Type(c, r, i)
-
-    return Tag(COMMAND) + Tag(REGISTER) + Tag(SEPERATOR) + Tag(INT) ^ process
-
-
-def i_type_with_ref():
-    def process(parsed):
-        (((c, r), _), i) = parsed
-        return I_Type(c, r, i)
-
-    return Tag(COMMAND) + Tag(REGISTER) + Tag(SEPERATOR) + Tag(REFERENCE) ^ process
-
-
-def r_type():
-    def process(parsed):
-        (((((c, rd), _), r1), _), r2) = parsed
-        return R_Type(c, rd, r1, r2)
-
-    return (
-        Tag(COMMAND)
-        + Tag(REGISTER)
-        + Tag(SEPERATOR)
-        + Tag(REGISTER)
-        + Tag(SEPERATOR)
-        + Tag(REGISTER)
-        ^ process
-    )
-
-
-def command_list():
-    return i_type() | i_type_with_ref() | r_type()

@@ -11,7 +11,20 @@ INT = "INT"
 SEPERATOR = "SEPERATOR"
 STRING = "STRING"
 
-commands = [r"li", r"lw", r"add", r"sub", r"sw", r"syscall", r"la", r"move", r"addi"]
+commands = [
+    r"addi",
+    r"li",
+    r"lw",
+    r"add",
+    r"sub",
+    r"sw",
+    r"syscall",
+    r"la",
+    r"move",
+    r"beq",
+    r"jal",
+    r"j",
+]
 registers = [r"[$][^\s,]+"]
 
 

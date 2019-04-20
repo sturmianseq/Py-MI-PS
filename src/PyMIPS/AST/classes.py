@@ -1,4 +1,5 @@
 from PyMIPS.lexer import *
+from PyMIPS.Datastructure.commands import get_command
 
 
 class I_Type:
@@ -9,6 +10,7 @@ class I_Type:
         self.immediate = None
         up = epic_unpack(contents)
         {4: self.set_4, 6: self.set_6}[len(up)](up)
+        self.func = get_command(self)
 
     def set_4(self, contents):
         self.command = contents[2]
@@ -34,6 +36,7 @@ class R_Type:
         self.shift_amount = None
         up = special_unpack(contents)
         {1: self.set_1, 4: self.set_4, 6: self.set_6}[len(up)](up)
+        self.func = get_command(self)
 
     def set_1(self, contents):
         self.command = contents[0]

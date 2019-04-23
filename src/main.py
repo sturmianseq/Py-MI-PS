@@ -1,7 +1,6 @@
 import sys
 
 from PyMIPS.lexer import lex
-from PyMIPS.AST.ast import parser
 
 if __name__ == "__main__":
     filename = sys.argv[1]
@@ -10,4 +9,3 @@ if __name__ == "__main__":
     tokens = lex(characters)
     print(tokens)
     print("\n\n")
-

@@ -12,4 +12,3 @@ if __name__ == "__main__":
     print("\n\n")
     res = parse(tokens)
     print(res)
-

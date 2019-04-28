@@ -1,25 +1,35 @@
 import sys
 
-from PyMIPS.AST.classes import I_Type, R_Type, J_Type
 from PyMIPS.Datastructure.register import RegisterPool
 from PyMIPS.Datastructure.immediate import StoredRefs
 
 
-def li_command(command: I_Type):
+def get_command(ast_class):
+    return {
+        "li": li_command,
+        "lw": lw_command,
+        "sw": sw_command,
+        "add": add_command,
+        "sub": sub_command,
+        "syscall": syscall_command,
+    }[ast_class.command](ast_class)
+
+
+def li_command(command):
     def exe():
         command.target_register.set_contents(command.immediate)
 
     return exe
 
 
-def lw_command(command: I_Type):
+def lw_command(command):
     def exe():
         command.target_register.set_contents(command.immediate)
 
     return exe
 
 
-def add_command(command: R_Type):
+def add_command(command):
     def exe():
         dest = command.destination
         res = command.r1.get_contents() + command.r2.get_contents()
@@ -28,7 +38,7 @@ def add_command(command: R_Type):
     return exe
 
 
-def sub_command(command: R_Type):
+def sub_command(command):
     def exe():
         dest = command.destination
         res = command.r1.get_contents() - command.r2.get_contents()
@@ -37,7 +47,7 @@ def sub_command(command: R_Type):
     return exe
 
 
-def sw_command(command: I_Type):
+def sw_command(command):
     def exe():
         contents = command.target_register.get_contents()
         StoredRefs.store_ref(command.immediate._value, contents)
@@ -45,7 +55,7 @@ def sw_command(command: I_Type):
     return exe
 
 
-def syscall_command(command: R_Type):
+def syscall_command(command):
     rp = RegisterPool.get_instance()
     v0 = rp.get_register("$v0")
 
@@ -64,12 +74,15 @@ def syscall_command(command: R_Type):
     def read_int():
         pass
 
-    return {
-        1: print_int,
-        2: print_float,
-        3: print_double,
-        4: print_string,
-        5: read_int,
-        10: sys.exit,
-    }[v0.get_contents()]
+    def exe():
+        return {
+            1: print_int,
+            2: print_float,
+            3: print_double,
+            4: print_string,
+            5: read_int,
+            10: sys.exit,
+        }[v0.get_contents()]
+
+    return exe
 

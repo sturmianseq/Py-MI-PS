@@ -8,7 +8,7 @@ if __name__ == "__main__":
     with open(filename) as file:
         characters = file.read()
     tokens = lex(characters)
-    print(tokens)
-    print("\n\n")
+    #print(tokens)
+    #print("\n\n")
     res = parse(tokens)
     print(res)

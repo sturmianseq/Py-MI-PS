@@ -1,5 +1,6 @@
 from PyMIPS.lexer import *
 from PyMIPS.Datastructure.commands import get_command
+from PyMIPS.AST.validator import validate
 
 
 class I_Type:
@@ -9,6 +10,8 @@ class I_Type:
         self.source_register = None
         self.immediate = None
         up = epic_unpack(contents)
+        if not validate(self):
+            raise Exception("Illegal arguments")
         {4: self.set_4, 6: self.set_6}[len(up)](up)
         self.func = get_command(self)
 
@@ -35,6 +38,8 @@ class R_Type:
         self.r2 = None
         self.shift_amount = None
         up = special_unpack(contents)
+        if not validate(self):
+            raise Exception("Illegal arguments")
         {1: self.set_1, 4: self.set_4, 6: self.set_6}[len(up)](up)
         self.func = get_command(self)
 
@@ -60,6 +65,8 @@ class J_Type:
     def __init__(self, command, address):
         self.command = command
         self.address = address
+        if not validate(self):
+            raise Exception("Illegal arguments")
 
     def __repr__(self):
         return f"{self.command}({self.address})"

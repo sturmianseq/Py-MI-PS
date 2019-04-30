@@ -1,11 +1,21 @@
 def validate(instruction) -> bool:
-    switch = {"li": validate_li, "sw": validate_sw, "add": validate_add}
+    switch = {
+        "li": validate_li,
+        "sw": validate_sw,
+        "add": validate_add,
+        "add": validate_3_rtype,
+        "sub": validate_3_rtype,
+    }
     func = switch[instruction.command]
     try:
         res = func(instruction)
     except:
         res = False
     return res
+
+
+def validate_3_rtype(instruction):
+    return True
 
 
 def validate_li(instruction):

@@ -15,7 +15,15 @@ def validate(instruction) -> bool:
 
 
 def validate_3_rtype(instruction):
-    return True
+    rd = instruction.destination
+    rs = instruction.r1
+    rt = instruction.r2
+
+    check1 = rd is not None
+    check2 = rs is not None
+    check3 = rt is not None
+
+    return check1 and check2 and check3
 
 
 def validate_2_rtype(instruction):

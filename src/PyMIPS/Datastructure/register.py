@@ -4,7 +4,7 @@ class Register:
         self.__contents = lambda: 0
 
     def __repr__(self):
-        return f"Register({self.name}, {str(self.__contents)})"
+        return f"Register({self.name}, {str(self.__contents())})"
 
     def set_contents(self, value):
         self.__contents = value
@@ -21,6 +21,10 @@ class RegisterPool:
         if RegisterPool.__instance == None:
             RegisterPool()
         return RegisterPool.__instance
+
+    def print_all_active_registers(self):
+        for key in self.registers:
+            print(self.registers[key])
 
     def __init__(self):
         if RegisterPool.__instance != None:

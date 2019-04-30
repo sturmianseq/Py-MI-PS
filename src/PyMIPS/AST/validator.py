@@ -18,6 +18,10 @@ def validate_3_rtype(instruction):
     return True
 
 
+def validate_2_rtype(instruction):
+    return True
+
+
 def validate_li(instruction):
     target = instruction.target_register
     source = instruction.source_register

@@ -2,7 +2,7 @@ import sys
 
 from PyMIPS.Datastructure.register import RegisterPool
 from PyMIPS.Datastructure.immediate import StoredRefs
-from PyMIPS.Datastructure.emulator import data_stack
+from PyMIPS.Datastructure.data_model import data_stack
 
 
 def get_command(ast_class):

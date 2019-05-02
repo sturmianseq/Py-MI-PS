@@ -1,7 +1,7 @@
 from PyMIPS.Datastructure.immediate import Immediate, Ref_Immediate
 from PyMIPS.Datastructure.register import RegisterPool, Register
 
-rp = RegisterPool.get_instance()
+rp = RegisterPool
 
 
 def create_immediate(value) -> Immediate:

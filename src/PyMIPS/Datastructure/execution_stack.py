@@ -1,6 +1,3 @@
-from PyMIPS.Datastructure.emulator import data_stack, register_pool, heap
-
-
 def run_from_list(commands: list):
     iteration = 0
     for c in commands:

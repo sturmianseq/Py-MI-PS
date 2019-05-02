@@ -5,3 +5,4 @@ __pycache__/
 Reports
 .tox
 PyMIPS.egg-info/
+.coverage

@@ -1,4 +1,4 @@
 scan:
-  image: eawalden/pi-mi-ps/sonar-scanner:latest
+  image: registry.gitlab.com/eawalden/pi-mi-ps/sonar-scanner:latest
   script:
     - sonar-scanner -Dsonar.projectKey=AshtonUPS_GroupB -Dsonar.organization=ashtonups-github -Dsonar.sources=. -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=8eb3f13e85c409a9c136d6c73e9e22e1b8b0d3e0

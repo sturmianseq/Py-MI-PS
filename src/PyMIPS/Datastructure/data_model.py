@@ -88,5 +88,7 @@ class DataStack:
             print(f"Address({key}): {self.stack[key]}")
 
 
+class Data_Heap
+
 # Exports
 data_stack = DataStack()

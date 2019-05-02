@@ -1,8 +1,4 @@
-from PyMIPS.Datastructure.register import RegisterPool
-from PyMIPS.Datastructure.immediate import StoredRefs
-from PyMIPS.Datastructure.commands import data_stack
-
-rp = RegisterPool.get_instance()
+from PyMIPS.Datastructure.emulator import data_stack, register_pool, heap
 
 
 def run_from_list(commands: list):
@@ -10,9 +6,9 @@ def run_from_list(commands: list):
     for c in commands:
         print(f"({iteration}): {str(c)}")
         c()
-        rp.print_all_active_registers()
+        register_pool.print_all_active_registers()
         print()
-        StoredRefs.print_all_active_refs()
+        heap.print_all_active_refs()
         print()
         data_stack.print_stack()
         iteration += 1

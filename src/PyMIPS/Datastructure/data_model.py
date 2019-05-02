@@ -87,3 +87,6 @@ class DataStack:
         for key in self.stack:
             print(f"Address({key}): {self.stack[key]}")
 
+
+# Exports
+data_stack = DataStack()

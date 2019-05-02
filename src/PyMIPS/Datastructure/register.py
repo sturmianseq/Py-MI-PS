@@ -14,30 +14,22 @@ class Register:
 
 
 class RegisterPool:
-    __instance = None
+    """RegisterPool is a collection of static methods that handle register interactions
+    """
+
+    __registers = {"$zero": Register("$zero")}
 
     @staticmethod
-    def get_instance():
-        if RegisterPool.__instance == None:
-            RegisterPool()
-        return RegisterPool.__instance
+    def print_all_active_registers():
+        for key in RegisterPool.__registers:
+            print(RegisterPool.__registers[key])
 
-    def print_all_active_registers(self):
-        for key in self.registers:
-            print(self.registers[key])
-
-    def __init__(self):
-        if RegisterPool.__instance != None:
-            raise Exception("Cannot instantiate")
-        else:
-            RegisterPool.__instance = self
-            self.registers = {"$zero": Register("$zero")}
-
-    def get_register(self, name) -> Register:
-        if name in self.registers.keys():
-            return self.registers[name]
+    @staticmethod
+    def get_register(name: str) -> Register:
+        if name in RegisterPool.__registers.keys():
+            return RegisterPool.__registers[name]
         else:
             reg = Register(name)
-            self.registers[name] = reg
+            RegisterPool.__registers[name] = reg
             return reg
 

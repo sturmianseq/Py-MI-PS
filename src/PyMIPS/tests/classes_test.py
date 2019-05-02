@@ -14,7 +14,3 @@ def example1_test():
     exe[4] = I_Type("sw", "$t2", immediate="Z")
     exe[5] = I_Type("sw", "$t5", "$sp", 4)
     run_from_list(exe)
-
-
-if __name__ == "__main__":
-    example1_test()

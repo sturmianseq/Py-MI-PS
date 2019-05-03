@@ -2,7 +2,7 @@ import sys
 
 from PyMIPS.lexer import lex
 from PyMIPS.AST.ast import parse
-from PyMIPS.tests.classes_test import example1_test
+from PyMIPS.tests.classes_test import test_example1
 
 if __name__ == "__main__":
     """
@@ -15,5 +15,5 @@ if __name__ == "__main__":
     res = parse(tokens)
     print(res)
     """
-    example1_test()
+    test_example1()
 

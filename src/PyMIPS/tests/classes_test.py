@@ -3,7 +3,7 @@ from PyMIPS.Datastructure.execution_stack import run_from_list
 from PyMIPS.Datastructure.immediate import StoredRefs
 
 
-def example1_test():
+def test_example1():
     exe = [0, 1, 2, 3, 4, 5]
     StoredRefs.store_ref("value", lambda: 12)
     StoredRefs.store_ref("Z", lambda: 0)

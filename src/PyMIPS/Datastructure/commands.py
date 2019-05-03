@@ -18,22 +18,25 @@ def get_command(ast_class):
 
 def li_command(command):
     def exe():
-        command.target_register.set_contents(command.immediate)
+        command.destination_register.set_contents(command.immediate)
 
     return exe
 
 
 def lw_command(command):
     def exe():
-        command.target_register.set_contents(command.immediate)
+        command.destination_register.set_contents(command.immediate)
 
     return exe
 
 
 def add_command(command):
     def exe():
-        dest = command.destination
-        res = command.r1.get_contents() + command.r2.get_contents()
+        dest = command.destination_register
+        res = (
+            command.source_register.get_contents()
+            + command.target_register.get_contents()
+        )
         dest.set_contents(lambda: res)
 
     return exe
@@ -41,8 +44,11 @@ def add_command(command):
 
 def sub_command(command):
     def exe():
-        dest = command.destination
-        res = command.r1.get_contents() - command.r2.get_contents()
+        dest = command.destination_register
+        res = (
+            command.source_register.get_contents()
+            - command.target_register.get_contents()
+        )
         dest.set_contents(lambda: res)
 
     return exe
@@ -50,11 +56,11 @@ def sub_command(command):
 
 def sw_command(command):
     def store_into_label():
-        contents = command.target_register.get_contents()
+        contents = command.destination_register.get_contents()
         StoredRefs.store_ref(command.immediate._value, lambda: contents)
 
     def store_on_stack():
-        value = command.target_register.get_contents()
+        value = command.destination_register.get_contents()
         offset = command.immediate()
         register = command.source_register.name
         data_stack.store_word(offset, value, register=register)

@@ -12,5 +12,5 @@ def example1_test():
     exe[2] = R_Type("add", "$t4", "$t2", "$t3")
     exe[3] = R_Type("sub", "$t5", "$t2", "$t3")
     exe[4] = I_Type("sw", "$t2", immediate="Z")
-    exe[5] = I_Type("sw", "$t5", "$sp", 4)
-    run_from_list(exe)
+    exe[5] = I_Type("sw", "$t5", 4, "$sp")
+    assert run_from_list(exe) == True

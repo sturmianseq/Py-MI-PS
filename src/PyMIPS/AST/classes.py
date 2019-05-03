@@ -34,6 +34,7 @@ class I_Type(Command):
         source : str, optional
             Name of source register, by default None
         """
+        super().__init__()
         self.command = command
         self.destination_register = create_register(destination)
         self.source_register = create_register(source)
@@ -41,7 +42,7 @@ class I_Type(Command):
         self.func = get_command(self)
 
     def __repr__(self):
-        return f"I_Type({self.command} {self.target_register}, {self.source_register}, {self.immediate})"
+        return f"I_Type({self.command} {self.destination_register}, {self.source_register}, {self.immediate})"
 
 
 class R_Type(Command):
@@ -68,6 +69,7 @@ class R_Type(Command):
         shamt : int, optional
             Shift amount, by default 0
         """
+        super().__init__()
         self.command = command
         self.destination_register = create_register(destination)
         self.source_register = create_register(source_register)
@@ -90,6 +92,7 @@ class J_Type(Command):
         address : not sure yet
             TODO
         """
+        super().__init__()
         self.command = command
         self.address = address
 

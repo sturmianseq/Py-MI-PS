@@ -2,7 +2,7 @@ from PyMIPS.Datastructure.commands import get_command
 from PyMIPS.AST.class_utils import create_register, create_immediate
 
 
-class Command:
+class BaseCommand:
     def __init__(self):
         """Base Command Class
         """
@@ -19,7 +19,7 @@ class Command:
         return self.func()
 
 
-class I_Type(Command):
+class I_Type(BaseCommand):
     def __init__(self, command: str, destination: str, immediate, source: str = None):
         """Stores I_Type commands
         
@@ -45,7 +45,7 @@ class I_Type(Command):
         return f"I_Type({self.command} {self.destination_register}, {self.source_register}, {self.immediate})"
 
 
-class R_Type(Command):
+class R_Type(BaseCommand):
     def __init__(
         self,
         command: str,
@@ -81,7 +81,7 @@ class R_Type(Command):
         return f"R_Type({self.command} {self.destination_register}, {self.source_register}, {self.target_register})"
 
 
-class J_Type(Command):
+class J_Type(BaseCommand):
     def __init__(self, command: str, address):
         """Stores J Type commands
         

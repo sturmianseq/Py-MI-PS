@@ -48,6 +48,7 @@ class MemoryBlock:
 
 class Memory:
     __data = {}
+    __next_block = 0
 
     @staticmethod
     def store_value(value, address: int, size=4):
@@ -87,3 +88,9 @@ class Memory:
     @staticmethod
     def get_data():
         return Memory.__data
+
+    @staticmethod
+    def alloc(size: int) -> int:
+        Memory.__next_block += size
+        return Memory.__next_block
+

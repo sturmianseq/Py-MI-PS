@@ -1,5 +1,5 @@
 class MemoryBlock:
-    def __init__(self, value, base_address:int, size:int):
+    def __init__(self, value, base_address: int, size: int):
         """Handles maintaining memory blocks
         
         Parameters
@@ -15,7 +15,7 @@ class MemoryBlock:
         self.base_address = base_address
         self.size = size
 
-    def __call__(self, address:int):
+    def __call__(self, address: int):
         """Returns the stored data given an address
         
         Parameters
@@ -37,9 +37,9 @@ class MemoryBlock:
         """
         if address != self.base_address:
             raise Exception(f"Bad Access: {address}")
-
+        data = Memory.get_data()
         for i in range(1, self.size):
-            new_val = Memory.__data[address + i]
+            new_val = data[address + i]
             if new_val.base_address != self.base_address:
                 raise Exception(f"Memory Corrupted: {address}")
 
@@ -51,35 +51,39 @@ class Memory:
 
     @staticmethod
     def store_value(value, address: int, size=4):
-    """Store a value in static memory
-    
-    Parameters
-    ----------
-    value : Any
-        A value to store in memory
-    address : int
-        The address to store the value
-    size : int, optional
-        The size in bytes of the value, by default 4
-    """
+        """Store a value in static memory
+        
+        Parameters
+        ----------
+        value : Any
+            A value to store in memory
+        address : int
+            The address to store the value
+        size : int, optional
+            The size in bytes of the value, by default 4
+        """
         for i in range(size):
-            Memory.__data[address + i]
+            Memory.__data[address + i] = MemoryBlock(value, address, size)
 
     @staticmethod
     def get_value(address: int):
-    """Retrives a value from memory
-    
-    Parameters
-    ----------
-    address : int
-        The address to access
-    
-    Returns
-    -------
-    Any
-        The value stored
-    """
+        """Retrives a value from memory
+        
+        Parameters
+        ----------
+        address : int
+            The address to access
+        
+        Returns
+        -------
+        Any
+            The value stored
+        """
         if address not in Memory.__data.keys():
             return 0
 
-        return Memory.__data[address]()
+        return Memory.__data[address](address)
+
+    @staticmethod
+    def get_data():
+        return Memory.__data

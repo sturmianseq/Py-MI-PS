@@ -97,7 +97,7 @@ commands = [
     r"j",
     r"li",
 ]
-registers = [r"[$][^\s,]+"]
+registers = [r"[$][^\s,)]+"]
 
 
 token_exprs = (

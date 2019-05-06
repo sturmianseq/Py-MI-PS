@@ -1,6 +1,3 @@
-from PyMIPS.Datastructure.instruction_types import IType, RType, JType
-
-
 def validate(instruction) -> bool:
     """[summary]
     
@@ -29,7 +26,7 @@ def validate(instruction) -> bool:
 
 
 def validate_3_rtype(instruction) -> bool:
-    rd = instruction.destination
+    rd = instruction.destination_register
     rs = instruction.source_register
     rt = instruction.target_register
 

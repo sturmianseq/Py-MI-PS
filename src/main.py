@@ -1,7 +1,6 @@
 import sys
 
-
-from PyMIPS.tests.example1_test import test_example1
+from PyMIPS.tests.validator_test import test_correct_rtype, test_incorrect_rtype
 
 if __name__ == "__main__":
     """
@@ -14,5 +13,6 @@ if __name__ == "__main__":
     res = parse(tokens)
     print(res)
     """
-    test_example1()
+    test_correct_rtype()
+    test_incorrect_rtype()
 

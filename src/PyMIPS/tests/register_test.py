@@ -1,4 +1,4 @@
-from PyMIPS.Datastructure.register import RegisterPool as rp
+from PyMIPS.Datastructure.data_model import RegisterPool as rp
 
 
 def test_setting_to_num():

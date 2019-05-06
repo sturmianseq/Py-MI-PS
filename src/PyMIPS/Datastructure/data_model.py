@@ -2,12 +2,74 @@
 
 This module houses the DataStack class which is used to replecate MIPS memory access
 """
-try:
-    from src.PyMIPS.AST.class_utils import create_register
-    from src.PyMIPS.Datastructure.memory import Memory
-except:
-    from PyMIPS.AST.class_utils import create_register
-    from PyMIPS.Datastructure.memory import Memory
+
+from PyMIPS.Datastructure.memory import Memory
+
+
+class Immediate:
+    def __init__(self, value):
+        self._value = value
+
+    def __call__(self):
+        return self._value()
+
+    def __repr__(self):
+        return f"Immediate({self()})"
+
+
+class RefImmediate(Immediate):
+    def __call__(self):
+        return DataHeap.get_value(self._value)
+
+
+class Register:
+    def __init__(self, name):
+        self.name = name
+        self.__contents = lambda: 0
+
+    def __repr__(self):
+        return f"Register({self.name}, {str(self.__contents())})"
+
+    def set_contents(self, value):
+        self.__contents = value
+
+    def get_contents(self):
+        return self.__contents()
+
+
+class RegisterPool:
+    """RegisterPool is a collection of static methods that handle register interactions
+    """
+
+    __registers = {"$zero": Register("$zero")}
+
+    @staticmethod
+    def print_all_active_registers():
+        for key in RegisterPool.__registers:
+            print(RegisterPool.__registers[key])
+
+    @staticmethod
+    def get_register(name: str) -> Register:
+        if name in RegisterPool.__registers.keys():
+            return RegisterPool.__registers[name]
+        else:
+            reg = Register(name)
+            RegisterPool.__registers[name] = reg
+            return reg
+
+
+def create_immediate(value) -> Immediate:
+    if type(value) == int:
+        return Immediate(lambda: value)
+    if type(value) == str:
+        return RefImmediate(value)
+    return None
+
+
+def create_register(value) -> Register:
+    if value is None:
+        return None
+    return RegisterPool.get_register(value)
 
 
 class DataStack:
@@ -90,4 +152,3 @@ class DataHeap:
     def get_value(label):
         address = DataHeap.get_address(label)
         return Memory.get_value(address)
-

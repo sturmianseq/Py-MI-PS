@@ -20,4 +20,6 @@ class TestDataHeap(unittest.TestCase):
         DataHeap.alloc(255)
         DataHeap.store(118, "V")
         self.assertEqual(DataHeap.get_value("V"), 118)
+        DataHeap.store(119, "V")
+        self.assertEqual(DataHeap.get_value("V"), 119)
 

@@ -1,5 +1,5 @@
 from PyMIPS.Datastructure.commands import get_command
-from PyMIPS.AST.class_utils import create_register, create_immediate
+from PyMIPS.Datastructure.data_model import create_register, create_immediate
 
 
 class BaseCommand:
@@ -19,7 +19,7 @@ class BaseCommand:
         return self.func()
 
 
-class I_Type(BaseCommand):
+class IType(BaseCommand):
     def __init__(self, command: str, destination: str, immediate, source: str = None):
         """Stores I_Type commands
         
@@ -42,10 +42,10 @@ class I_Type(BaseCommand):
         self.func = get_command(self)
 
     def __repr__(self):
-        return f"I_Type({self.command} {self.destination_register}, {self.source_register}, {self.immediate})"
+        return f"IType({self.command} {self.destination_register}, {self.source_register}, {self.immediate})"
 
 
-class R_Type(BaseCommand):
+class RType(BaseCommand):
     def __init__(
         self,
         command: str,
@@ -78,10 +78,10 @@ class R_Type(BaseCommand):
         self.func = get_command(self)
 
     def __repr__(self):
-        return f"R_Type({self.command} {self.destination_register}, {self.source_register}, {self.target_register})"
+        return f"RType({self.command} {self.destination_register}, {self.source_register}, {self.target_register})"
 
 
-class J_Type(BaseCommand):
+class JType(BaseCommand):
     def __init__(self, command: str, address):
         """Stores J Type commands
         
@@ -97,7 +97,7 @@ class J_Type(BaseCommand):
         self.address = address
 
     def __repr__(self):
-        return f"{self.command}({self.address})"
+        return f"RType({self.command}, {self.address})"
 
 
 def unpack(contents) -> list:

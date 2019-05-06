@@ -45,6 +45,9 @@ class MemoryBlock:
 
         return self.value
 
+    def __repr__(self):
+        return f"{self.value}"
+
 
 class Memory:
     __data = {}
@@ -93,4 +96,11 @@ class Memory:
     def alloc(size: int) -> int:
         Memory.__next_block += size
         return Memory.__next_block
+
+    @staticmethod
+    def print():
+        for key in Memory.__data.keys():
+            block = Memory.__data[key]
+            if block.base_address == key:
+                print(f"{key}: {block}")
 

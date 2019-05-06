@@ -1,8 +1,6 @@
 import sys
 
-from PyMIPS.Datastructure.register import RegisterPool
-from PyMIPS.Datastructure.immediate import StoredRefs
-from PyMIPS.Datastructure.data_model import data_stack
+from PyMIPS.Datastructure.data_model import RegisterPool, DataHeap, DataStack
 
 
 def get_command(ast_class):
@@ -57,13 +55,13 @@ def sub_command(command):
 def sw_command(command):
     def store_into_label():
         contents = command.destination_register.get_contents()
-        StoredRefs.store_ref(command.immediate._value, lambda: contents)
+        DataHeap.store(contents, command.immediate._value)
 
     def store_on_stack():
         value = command.destination_register.get_contents()
         offset = command.immediate()
         register = command.source_register.name
-        data_stack.store_word(offset, value, register=register)
+        DataStack.store_word(offset, value, register=register)
 
     if command.source_register:
         return store_on_stack
@@ -72,7 +70,7 @@ def sw_command(command):
 
 
 def syscall_command(command):
-    rp = RegisterPool.get_instance()
+    rp = RegisterPool
     v0 = rp.get_register("$v0")
 
     def print_int():

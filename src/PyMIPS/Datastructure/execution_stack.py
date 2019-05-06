@@ -1,21 +1,20 @@
-from PyMIPS.Datastructure.register import RegisterPool
-from PyMIPS.Datastructure.data_model import data_stack
+from PyMIPS.Datastructure.data_model import RegisterPool, DataStack, DataHeap
+from PyMIPS.Datastructure.memory import Memory
 
 
 def run_from_list(commands: list):
-    try:
 
+    try:
         iteration = 0
         for c in commands:
             print(f"({iteration}): {str(c)}")
             c()
             RegisterPool.print_all_active_registers()
             print()
-            # heap.print_all_active_refs()
-            # print()
-            data_stack.print_stack()
+            DataHeap.print()
+            Memory.print()
             iteration += 1
+        return True
     except:
         return False
 
-    return True

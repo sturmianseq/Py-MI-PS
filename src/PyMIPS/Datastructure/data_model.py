@@ -134,13 +134,16 @@ class DataHeap:
 
     @staticmethod
     def alloc(heap_size: int):
-        _DataHeap__next_address = Memory.alloc(heap_size)
+        DataHeap.__next_address = Memory.alloc(heap_size)
 
     @staticmethod
     def store(value, label, size=4):
-        DataHeap.__next_address -= size
-        Memory.store_value(value, DataHeap.__next_address, size)
-        DataHeap.__refs[label] = DataHeap.__next_address
+        if label not in DataHeap.__refs.keys():
+            DataHeap.__next_address -= size
+            Memory.store_value(value, DataHeap.__next_address, size)
+            DataHeap.__refs[label] = DataHeap.__next_address
+        else:
+            Memory.store_value(value, DataHeap.__refs[label], size)
 
     @staticmethod
     def get_address(label):
@@ -152,3 +155,7 @@ class DataHeap:
     def get_value(label):
         address = DataHeap.get_address(label)
         return Memory.get_value(address)
+
+    @staticmethod
+    def print():
+        print(DataHeap.__refs)

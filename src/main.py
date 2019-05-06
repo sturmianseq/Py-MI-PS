@@ -1,8 +1,7 @@
 import sys
 
-from PyMIPS.lexer import lex
-from PyMIPS.AST.ast import parse
-from PyMIPS.tests.classes_test import test_example1
+
+from PyMIPS.tests.example1_test import test_example1
 
 if __name__ == "__main__":
     """

@@ -1,9 +1,10 @@
 import sys
 
-from PyMIPS.lexer import lex
-from PyMIPS.AST.ast import parse
+
+from PyMIPS.tests.example1_test import test_example1
 
 if __name__ == "__main__":
+    """
     filename = sys.argv[1]
     with open(filename) as file:
         characters = file.read()
@@ -12,3 +13,6 @@ if __name__ == "__main__":
     #print("\n\n")
     res = parse(tokens)
     print(res)
+    """
+    test_example1()
+

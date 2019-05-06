@@ -2,3 +2,7 @@ Env/*
 __pycache__/
 *.pyc
 .DS_Store
+Reports
+.tox
+PyMIPS.egg-info/
+.coverage

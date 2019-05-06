@@ -49,7 +49,15 @@ def i_type():
 
 
 def i_type_with_offset():
-    return None
+    return (
+        Tag(COMMAND)
+        + Tag(REGISTER)
+        + Tag(SEPERATOR)
+        + Tag(INT)
+        + Tag(PAREN)
+        + Tag(REGISTER)
+        + Tag(PAREN)
+    )
 
 
 def r_type():

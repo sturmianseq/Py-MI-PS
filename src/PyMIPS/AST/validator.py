@@ -1,3 +1,6 @@
+from PyMIPS.Datastructure.instruction_types import IType, RType, JType
+
+
 def validate(instruction) -> bool:
     """[summary]
     
@@ -25,10 +28,10 @@ def validate(instruction) -> bool:
     return res
 
 
-def validate_3_rtype(instruction):
+def validate_3_rtype(instruction) -> bool:
     rd = instruction.destination
-    rs = instruction.r1
-    rt = instruction.r2
+    rs = instruction.source_register
+    rt = instruction.target_register
 
     check1 = rd is not None
     check2 = rs is not None
@@ -37,7 +40,7 @@ def validate_3_rtype(instruction):
     return check1 and check2 and check3
 
 
-def validate_2_rtype(instruction):
+def validate_2_rtype(instruction) -> bool:
     rd = instruction.destination
     rs = instruction.r1
     rt = instruction.r2
@@ -49,7 +52,7 @@ def validate_2_rtype(instruction):
     return check1 and check2 and check3
 
 
-def validate_li(instruction):
+def validate_li(instruction) -> bool:
     target = instruction.target_register
     source = instruction.source_register
     immediate = instruction.immediate

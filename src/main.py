@@ -1,15 +1,18 @@
-from PyMIPS.lexer import *
-from PyMIPS.parser import prepare
-from PyMIPS.ast import parser
+import sys
+
+
+from PyMIPS.tests.example1_test import test_example1
 
 if __name__ == "__main__":
+    """
     filename = sys.argv[1]
     with open(filename) as file:
         characters = file.read()
     tokens = lex(characters)
-    print(str(tokens) + "\n\n")
-    result = prepare(tokens)
-    print(str(result) + "\n\n")
-    ast = parser()(tokens, 0)
-    print(ast)
+    print(tokens)
+    print("\n\n")
+    res = parse(tokens)
+    print(res)
+    """
+    test_example1()
 

@@ -1,13 +1,24 @@
 def validate(instruction) -> bool:
+    """[summary]
+    
+    Parameters
+    ----------
+    instruction : [type]
+        [description]
+    
+    Returns
+    -------
+    bool
+        [description]
+    """
     switch = {
         "li": validate_li,
         "sw": validate_sw,
-        "add": validate_add,
         "add": validate_3_rtype,
         "sub": validate_3_rtype,
     }
-    func = switch[instruction.command]
     try:
+        func = switch[instruction.command]
         res = func(instruction)
     except:
         res = False

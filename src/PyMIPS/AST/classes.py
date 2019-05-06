@@ -38,9 +38,9 @@ class R_Type:
         self.r2 = None
         self.shift_amount = None
         up = special_unpack(contents)
-        # if not validate(self):
-        # raise Exception("Illegal arguments")
         {1: self.set_1, 4: self.set_4, 6: self.set_6}[len(up)](up)
+        if not validate(self):
+            raise Exception("Illegal arguments")
         # self.func = get_command(self)
 
     def set_1(self, contents):

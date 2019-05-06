@@ -1,7 +1,6 @@
 import sys
 
-from PyMIPS.Datastructure.register import RegisterPool
-from PyMIPS.Datastructure.immediate import StoredRefs
+from PyMIPS.Datastructure.data_model import RegisterPool, DataHeap, DataStack
 
 
 def get_command(ast_class):
@@ -17,22 +16,25 @@ def get_command(ast_class):
 
 def li_command(command):
     def exe():
-        command.target_register.set_contents(command.immediate)
+        command.destination_register.set_contents(command.immediate)
 
     return exe
 
 
 def lw_command(command):
     def exe():
-        command.target_register.set_contents(command.immediate)
+        command.destination_register.set_contents(command.immediate)
 
     return exe
 
 
 def add_command(command):
     def exe():
-        dest = command.destination
-        res = command.r1.get_contents() + command.r2.get_contents()
+        dest = command.destination_register
+        res = (
+            command.source_register.get_contents()
+            + command.target_register.get_contents()
+        )
         dest.set_contents(lambda: res)
 
     return exe
@@ -40,23 +42,35 @@ def add_command(command):
 
 def sub_command(command):
     def exe():
-        dest = command.destination
-        res = command.r1.get_contents() - command.r2.get_contents()
+        dest = command.destination_register
+        res = (
+            command.source_register.get_contents()
+            - command.target_register.get_contents()
+        )
         dest.set_contents(lambda: res)
 
     return exe
 
 
 def sw_command(command):
-    def exe():
-        contents = command.target_register.get_contents()
-        StoredRefs.store_ref(command.immediate._value, contents)
+    def store_into_label():
+        contents = command.destination_register.get_contents()
+        DataHeap.store(contents, command.immediate._value)
 
-    return exe
+    def store_on_stack():
+        value = command.destination_register.get_contents()
+        offset = command.immediate()
+        register = command.source_register.name
+        DataStack.store_word(offset, value, register=register)
+
+    if command.source_register:
+        return store_on_stack
+    else:
+        return store_into_label
 
 
 def syscall_command(command):
-    rp = RegisterPool.get_instance()
+    rp = RegisterPool
     v0 = rp.get_register("$v0")
 
     def print_int():

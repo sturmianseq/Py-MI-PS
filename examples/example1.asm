@@ -15,6 +15,7 @@ main:
 	add $t4, $t2, $t3	# Add
 	sub $t5, $t2, $t3	# Subtract
 	sw $t5, Z		#Store the answer in Z (declared at the bottom)  
+	sw $t4, 4($sp)
 
 	# Exit the program by means of a syscall.
 	# There are many syscalls - pick the desired one

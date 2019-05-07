@@ -11,7 +11,18 @@ def get_command(ast_class):
         "add": add_command,
         "sub": sub_command,
         "syscall": syscall_command,
+        "mflo": mflo_command,
+        "mfhi": mfhi_command,
+        "div": div_command,
+        "move": move_command
     }[ast_class.command](ast_class)
+
+def move_command(command):
+    def exe():
+        source = command.source_register.get_contents()
+        command.destination_register.set_contents(source)
+
+    return exe
 
 
 def li_command(command):
@@ -24,6 +35,40 @@ def li_command(command):
 def lw_command(command):
     def exe():
         command.destination_register.set_contents(command.immediate)
+
+    return exe
+
+
+def mflo_command(command):
+    def exe():
+        mflo = RegisterPool.get_register("$mflo")
+        command.destination_register.set_contents(mflo.get_contents())
+
+    return exe
+
+
+def mfhi_command(command):
+    def exe():
+        mfhi = RegisterPool.get_register("$mfhi")
+        command.destination_register.set_contents(mfhi.get_contents())
+
+    return exe
+
+
+def div_command(command):
+    def exe():
+        quotient_res = (
+            command.source_register.get_contents()
+            // command.destination_register.get_contents()
+        )
+        remainder_res = (
+            command.source_register.get_contents()
+            % command.destination_register.get_contents()
+        )
+        mfhi = RegisterPool.get_register("$mfhi")
+        mflo = RegisterPool.get_register("$mflo")
+        mfhi.set_contents(lambda: remainder_res)
+        mflo.set_contents(lambda: quotient_res)
 
     return exe
 

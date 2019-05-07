@@ -5,6 +5,9 @@ from PyMIPS.Datastructure.data_model import create_register, create_immediate
 class BaseCommand:
     def __init__(self):
         """Base Command Class
+        move $dest, $targ
+        add $dest, $targ, $source
+        li $dest, immediate
         """
         self.command = None
         self.destination_register = None  # The register to be mutated
@@ -60,7 +63,7 @@ class RType(BaseCommand):
         ----------
         command : str
             R Type command string
-        destination : str
+        destination_register : str
             Destination register name
         source_register : str, optional
             Source register name, by default None

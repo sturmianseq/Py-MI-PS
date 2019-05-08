@@ -21,20 +21,32 @@ class RefImmediate(Immediate):
     def __call__(self):
         return DataHeap.get_value(self._value)
 
+    def __repr__(self):
+        return f"Immediate({self._value}: {self()})"
+
 
 class Register:
     def __init__(self, name):
         self.name = name
-        self.__contents = lambda: 0
+        self.__contents = bytes(0)
 
     def __repr__(self):
-        return f"Register({self.name}, {str(self.__contents())})"
+        return f"Register({self.name}, {str(self.get_contents_as_int())})"
 
-    def set_contents(self, value):
-        self.__contents = value
+    def set_contents_from_int(self, value: int):
+        self.__contents = value.to_bytes(4, "big", signed=True)
 
-    def get_contents(self):
-        return self.__contents()
+    def set_contents_from_bytes(self, value: bytes):
+        if len(value) > 4:
+            self.__contents = value[:4]
+        else:
+            self.__contents = value
+
+    def get_contents_as_int(self):
+        return int.from_bytes(self.__contents, "big", signed=True)
+
+    def get_contents_as_bytes(self):
+        return self.__contents
 
 
 class RegisterPool:
@@ -78,19 +90,19 @@ class DataStack:
 
     @staticmethod
     def alloc(stack_size: int):
-        _DataStack__stack_size = Memory.alloc(stack_size)
-        DataStack.__stack_pointer.set_contents(lambda: _DataStack__stack_size)
+        DataStack.__stack_size = Memory.alloc(stack_size)
+        DataStack.__stack_pointer.set_contents_from_int(DataStack.__stack_size)
 
     @staticmethod
-    def store_word(offset: int, value: callable, register="$sp"):
+    def store_word(offset: int, value: int, register="$sp"):
         """Replicates the store word functionality of MIPS
         
         Parameters
         ----------
         offset : int
             Offset from the register
-        value : callable
-            The contained value as a callable
+        value : int
+            The contained value
         register : str, optional
             The register to offset from, by default "$sp"
         """
@@ -98,13 +110,13 @@ class DataStack:
         r = create_register(register)
 
         # Calculate the location
-        location = r.get_contents() + offset
+        location = r.get_contents_as_int() + offset
 
         # Set it
-        Memory.store_value(value, location)
+        Memory.store_word(value, location)
 
     @staticmethod
-    def load_word(offset: int, register="$sp") -> callable:
+    def load_word(offset: int, register="$sp") -> int:
         """Replicates the load word functionality of mips
         
         Parameters
@@ -116,16 +128,16 @@ class DataStack:
         
         Returns
         -------
-        callable
+        int
             The value stored in the load word as a callable
         """
         # Get the offset register
         r = create_register(register)
 
         # Calculate the location
-        location = r.get_contents() + offset
+        location = r.get_contents_as_int() + offset
 
-        return Memory.get_value(location)
+        return Memory.get_word(location)
 
 
 class DataHeap:
@@ -137,24 +149,33 @@ class DataHeap:
         DataHeap.__next_address = Memory.alloc(heap_size)
 
     @staticmethod
-    def store(value, label, size=4):
+    def store_word(value: int, label: str):
         if label not in DataHeap.__refs.keys():
-            DataHeap.__next_address -= size
-            Memory.store_value(value, DataHeap.__next_address, size)
-            DataHeap.__refs[label] = DataHeap.__next_address
+            DataHeap.__next_address -= 4
+            Memory.store_word(value, DataHeap.__next_address)
+            DataHeap.__refs[label] = (DataHeap.__next_address, 4)
         else:
-            Memory.store_value(value, DataHeap.__refs[label], size)
+            address, _ = DataHeap.__refs[label]
+            Memory.store_word(value, address)
 
     @staticmethod
-    def get_address(label):
+    def get_address(label: str):
         if label in DataHeap.__refs.keys():
-            return DataHeap.__refs[label]
+            return DataHeap.__refs[label][0]
         raise Exception(f"Heap Address Not Found: {label}")
 
     @staticmethod
-    def get_value(label):
-        address = DataHeap.get_address(label)
-        return Memory.get_value(address)
+    def get_value(label: str) -> bytes:
+        address, size = DataHeap.__refs[label]
+        b = []
+        for i in range(size):
+            b.append(Memory.get_byte(address + i))
+        return bytes(b)
+
+    @staticmethod
+    def get_value_as_int(label: str) -> int:
+        b = DataHeap.get_value(label)
+        return int.from_bytes(b, "big")
 
     @staticmethod
     def print():

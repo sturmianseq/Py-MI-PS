@@ -14,8 +14,9 @@ def get_command(ast_class):
         "mflo": mflo_command,
         "mfhi": mfhi_command,
         "div": div_command,
-        "move": move_command
+        "move": move_command,
     }[ast_class.command](ast_class)
+
 
 def move_command(command):
     def exe():
@@ -27,14 +28,14 @@ def move_command(command):
 
 def li_command(command):
     def exe():
-        command.destination_register.set_contents(command.immediate)
+        command.destination_register.set_contents_from_int(command.immediate())
 
     return exe
 
 
 def lw_command(command):
     def exe():
-        command.destination_register.set_contents(command.immediate)
+        command.destination_register.set_contents_from_bytes(command.immediate())
 
     return exe
 
@@ -77,10 +78,10 @@ def add_command(command):
     def exe():
         dest = command.destination_register
         res = (
-            command.source_register.get_contents()
-            + command.target_register.get_contents()
+            command.source_register.get_contents_as_int()
+            + command.target_register.get_contents_as_int()
         )
-        dest.set_contents(lambda: res)
+        dest.set_contents_from_int(res)
 
     return exe
 
@@ -89,21 +90,21 @@ def sub_command(command):
     def exe():
         dest = command.destination_register
         res = (
-            command.source_register.get_contents()
-            - command.target_register.get_contents()
+            command.source_register.get_contents_as_int()
+            - command.target_register.get_contents_as_int()
         )
-        dest.set_contents(lambda: res)
+        dest.set_contents_from_int(res)
 
     return exe
 
 
 def sw_command(command):
     def store_into_label():
-        contents = command.destination_register.get_contents()
-        DataHeap.store(contents, command.immediate._value)
+        contents = command.destination_register.get_contents_as_int()
+        DataHeap.store_word(contents, command.immediate._value)
 
     def store_on_stack():
-        value = command.destination_register.get_contents()
+        value = command.destination_register.get_contents_as_int()
         offset = command.immediate()
         register = command.source_register.name
         DataStack.store_word(offset, value, register=register)

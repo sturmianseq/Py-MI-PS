@@ -1,6 +1,7 @@
 import sys
 
 from PyMIPS.tests.example1_test import test_example1
+from PyMIPS.Datastructure.memory import Memory
 
 if __name__ == "__main__":
     """
@@ -14,4 +15,6 @@ if __name__ == "__main__":
     print(res)
     """
     test_example1()
-
+    # Memory.store_asciiz("Storing data is fun", 2014)
+    # Memory.print()
+    # print(Memory.load_asciiz(2014))

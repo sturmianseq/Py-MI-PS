@@ -8,10 +8,7 @@ def run_from_list(commands: list):
     for c in commands:
         print(f"({iteration}): {str(c)}")
         c()
-        RegisterPool.print_all_active_registers()
         print()
-        # DataHeap.print()
-        Memory.print()
         iteration += 1
     return True
 

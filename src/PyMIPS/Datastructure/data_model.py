@@ -29,24 +29,33 @@ class Register:
     def __init__(self, name):
         self.name = name
         self.__contents = bytes(0)
+        self.__old = bytes(0)
 
     def __repr__(self):
         return f"Register({self.name}, {str(self.get_contents_as_int())})"
 
     def set_contents_from_int(self, value: int):
         self.__contents = value.to_bytes(4, "big", signed=True)
+        self.change()
 
     def set_contents_from_bytes(self, value: bytes):
         if len(value) > 4:
             self.__contents = value[:4]
         else:
             self.__contents = value
+        self.change()
 
     def get_contents_as_int(self):
         return int.from_bytes(self.__contents, "big", signed=True)
 
     def get_contents_as_bytes(self):
         return self.__contents
+
+    def change(self):
+        old = int.from_bytes(self.__old, "big")
+        new = int.from_bytes(self.__contents, "big")
+        print(f"\tRegister {self.name} changed from {old} to {new}")
+        self.__old = self.__contents
 
 
 class RegisterPool:

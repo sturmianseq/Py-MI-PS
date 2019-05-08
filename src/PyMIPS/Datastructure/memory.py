@@ -9,7 +9,13 @@ class Memory:
 
     @staticmethod
     def store_byte(value: bytes, address: int):
+        old = Memory.get_byte(address)
         Memory.__data[address] = value
+        Memory.change(old, value, address)
+
+    @staticmethod
+    def change(old: bytes, new: bytes, address: int):
+        print(f"\tMemory {address} changed from {old} to {new}")
 
     @staticmethod
     def get_byte(address: int) -> bytes:

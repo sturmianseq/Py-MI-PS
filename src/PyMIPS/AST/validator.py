@@ -129,7 +129,6 @@ def validate_2_itype(instruction) -> bool:
     check2 = source is not None
     check3 = immediate is not None
     check4 = target is None
-    print(check1, check2, check3, check4)
 
     return check1 and check2 and check3 and check4
 
@@ -142,7 +141,6 @@ def validate_optional_2_itype(instruction) -> bool:
     check1 = destination is not None
     check3 = immediate is not None
     check4 = target is None
-    print(check1, check3, check4)
 
     return check1 and check3 and check4
 
@@ -157,7 +155,6 @@ def validate_1_itype(instruction) -> bool:
     check2 = target is None
     check3 = immediate is not None
     check4 = source is None
-    print(check1, check2, check3, check4)
 
     return check1 and check2 and check3 and check4
 

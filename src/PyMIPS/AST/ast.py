@@ -1,21 +1,24 @@
 from PyMIPS.AST.combinators import *
-from PyMIPS.AST.classes import *
 from PyMIPS.AST.blocks import *
 from PyMIPS.lexer import *
 
 from PyMIPS.AST.Parsers.text import text_parser, global_directive
+from PyMIPS.AST.Parsers.data import data_parser
 
 
 def parse(tokens):
-    return asm_parser()(tokens, 0)
+    def process(data):
+        return Program(data)
+
+    return (asm_parser() ^ process)(tokens, 0)
 
 
 def asm_parser():
-    return blocks() + Lazy(blocks) | blocks()
+    return blocks() + Lazy(asm_parser) | blocks()
 
 
 def blocks():
-    return global_directive() | text_block()
+    return global_directive() | text_block() | data_block()
 
 
 def text_block():
@@ -27,5 +30,9 @@ def text_block():
 
 
 def data_block():
-    return None
+    def process(data):
+        _, contents = data
+        return DataBlock(contents)
+
+    return Keyword(".data", DIRECTIVE) + data_parser() ^ process
 

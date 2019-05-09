@@ -1,6 +1,7 @@
 from PyMIPS.Datastructure.instruction_types import IType, RType, JType
 from PyMIPS.Datastructure.execution_stack import run_from_list
 from PyMIPS.Datastructure.data_model import DataHeap, DataStack
+from PyMIPS.Datastructure.memory import Memory
 
 
 def test_example1():

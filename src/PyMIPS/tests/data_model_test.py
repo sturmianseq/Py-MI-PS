@@ -18,8 +18,8 @@ class TestDataStack(unittest.TestCase):
 class TestDataHeap(unittest.TestCase):
     def test_storage(self):
         DataHeap.alloc(255)
-        DataHeap.store(118, "V")
-        self.assertEqual(DataHeap.get_value("V"), 118)
-        DataHeap.store(119, "V")
-        self.assertEqual(DataHeap.get_value("V"), 119)
+        DataHeap.store_word(118, "V")
+        self.assertEqual(DataHeap.get_value_as_int("V"), 118)
+        DataHeap.store_word(119, "V")
+        self.assertEqual(DataHeap.get_value_as_int("V"), 119)
 

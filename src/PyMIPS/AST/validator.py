@@ -12,7 +12,7 @@ def validate(instruction) -> bool:
         Valid or not valid
     """
     switch = {
-        # R Type instructions 
+        # R Type instructions
         "add": validate_3_rtype,
         "addu": validate_3_rtype,
         "and": validate_3_rtype,
@@ -31,13 +31,23 @@ def validate(instruction) -> bool:
         "jalr": validate_2_rtype,
         "mult": validate_2_rtype,
         "multu": validate_2_rtype,
+        "move": validate_2_rtype,
         "mfhi": validate_1_rtype,
         "mflo": validate_1_rtype,
         "mthi": validate_1_rtype,
         "mtlo": validate_1_rtype,
         "syscall": validate_0_rtype,
+        # I Type instructions
+        "addi": validate_2_rtype,
+        "addiu": validate_2_rtype,
+        "andi": validate_2_rtype,
+        "beq": validate_2_rtype,
+        "bne": validate_2_rtype,
+        "ori": validate_2_rtype,
+        "slti": validate_2_rtype,
+        "sltiu": validate_2_rtype,
+        "xori": validate_2_rtype,
         "li": validate_1_itype,
-        "move": validate_2_rtype,
         "sw": validate_optional_2_itype,
         "lw": validate_optional_2_itype,
     }

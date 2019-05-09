@@ -1,20 +1,15 @@
 import sys
 
-from PyMIPS.tests.example1_test import test_example1
-from PyMIPS.Datastructure.memory import Memory
+from PyMIPS.lexer import lex
+from PyMIPS.AST.ast import parse
+from PyMIPS.Datastructure.execution_stack import run_program
 
 if __name__ == "__main__":
-    """
+
     filename = sys.argv[1]
     with open(filename) as file:
         characters = file.read()
     tokens = lex(characters)
-    #print(tokens)
-    #print("\n\n")
     res = parse(tokens)
-    print(res)
-    """
-    test_example1()
-    # Memory.store_asciiz("Storing data is fun", 2014)
-    # Memory.print()
-    # print(Memory.load_asciiz(2014))
+    run_program(res.value)
+

@@ -8,27 +8,27 @@ class TestRType(unittest.TestCase):
         try:
             RType("add", "$t3", "$t2", "$t1")
             RType("addu", "$t3", "$t2", "$t1")
-            # RType("and", "$t3", "$t2", "$t1")
-            # RType("nor", "$t3", "$t2", "$t1")
-            # RType("or", "$t3", "$t2", "$t1")
-            # RType("sll", "$t3", "$t2", "$t1")
-            # RType("slt", "$t3", "$t2", "$t1")
-            # RType("sltu", "$t3", "$t2", "$t1")
-            # RType("sra", "$t3", "$t2", "$t1")
-            # RType("srav", "$t3", "$t2", "$t1")
+            RType("and", "$t3", "$t2", "$t1")
+            RType("nor", "$t3", "$t2", "$t1")
+            RType("or", "$t3", "$t2", "$t1")
+            RType("sll", "$t3", "$t2", "$t1")
+            RType("slt", "$t3", "$t2", "$t1")
+            RType("sltu", "$t3", "$t2", "$t1")
+            RType("sra", "$t3", "$t2", "$t1")
+            RType("srav", "$t3", "$t2", "$t1")
             RType("sub", "$t3", "$t2", "$t1")
-            # RType("subu", "$t3", "$t2", "$t1")
-            # RType("xor", "$t3", "$t2", "$t1")
+            RType("subu", "$t3", "$t2", "$t1")
+            RType("xor", "$t3", "$t2", "$t1")
             RType("div", "$t3", "$t2")
-            # RType("divu", "$t3", "$t2")
-            # RType("jalr", "$t3", "$t2")
-            # RType("mult", "$t3", "$t2")
-            # RType("multu", "$t3", "$t2")
+            RType("divu", "$t3", "$t2")
+            RType("jalr", "$t3", "$t2")
+            RType("mult", "$t3", "$t2")
+            RType("multu", "$t3", "$t2")
             RType("move", "$t3", "$t2")
             RType("mfhi", "$t3")
             RType("mflo", "$t3")
-            # RType("mthi", "$t3")
-            # RType("mtlo", "$t3")
+            RType("mthi", "$t3")
+            RType("mtlo", "$t3")
             RType("syscall", destination=None)
         except:
             self.fail()
@@ -36,6 +36,22 @@ class TestRType(unittest.TestCase):
     def test_bad_3(self):
         with self.assertRaises(Exception):
             RType("add", "$t3")
+        with self.assertRaises(Exception):
+            RType("sub", "$t3", "4")
+        with self.assertRaises(Exception):
+            RType("move", "$3", "t435", "$vew")
+        with self.assertRaises(Exception):
+            RType("lw", "$t3", "$s4", "gfd4")
+
+    def test_bad_2(self):
+        with self.assertRaises(Exception):
+            RType("add", "$t3", "$t4")
+        with self.assertRaises(Exception):
+            RType("div", "$t3")
+        with self.assertRaises(Exception):
+            RType("mul", "$t3", "4")
+        with self.assertRaises(Exception):
+            RType("jalr", "$t3")
 
 
 class TestIType(unittest.TestCase):

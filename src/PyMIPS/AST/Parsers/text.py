@@ -1,7 +1,7 @@
 from PyMIPS.AST.combinators import *
-from PyMIPS.AST.classes import *
 from PyMIPS.AST.blocks import *
 from PyMIPS.lexer import *
+from PyMIPS.AST.ast_utils import *
 
 
 def global_directive():
@@ -33,12 +33,12 @@ def command_iterator():
 
 
 def command_list():
-    return i_type() | r_type() | syscall() | j_type()
+    return i_type_with_offset() | i_type() | r_type() | syscall() | j_type()
 
 
 def i_type():
     def process(data):
-        return I_Type(data)
+        return create_i_type(data)
 
     return (
         Tag(COMMAND)
@@ -57,12 +57,12 @@ def i_type_with_offset():
         + Tag(PAREN)
         + Tag(REGISTER)
         + Tag(PAREN)
-    )
+    ) ^ create_i_type
 
 
 def r_type():
     def process(data):
-        return R_Type(data)
+        return create_r_type(data)
 
     return (
         Tag(COMMAND)
@@ -83,14 +83,13 @@ def r_type():
 
 def syscall():
     def process(data):
-        return R_Type("syscall")
+        return create_syscall()
 
     return Keyword("syscall", COMMAND) ^ process
 
 
 def j_type():
     def process(data):
-        command, ref = data
-        return J_Type(command, ref)
+        return create_j_type(data)
 
     return (Keyword("j", COMMAND) | Keyword("jal", COMMAND)) + Tag(REFERENCE) ^ process

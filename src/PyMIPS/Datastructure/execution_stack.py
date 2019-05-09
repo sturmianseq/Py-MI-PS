@@ -42,5 +42,5 @@ def run_program(p: Program):
             ProgramStack.execute_next()
             # RegisterPool.print_all_active_registers()
         except Exception as e:
-            print(e.with_traceback())
+            print(e)
             break

@@ -3,7 +3,7 @@ from PyMIPS.Datastructure.data_model import create_register, create_immediate
 
 
 class BaseCommand:
-    def __init__(self):
+    def __init__(self, command_str: str):
         """Base Command Class
         move $dest, $targ
         add $dest, $targ, $source
@@ -17,13 +17,24 @@ class BaseCommand:
         self.immediate = None  # Immediate
         self.address = None  # Address for J Types
         self.func = lambda: False
+        self.command_string = command_str
 
     def __call__(self):
         return self.func()
 
+    def __repr__(self):
+        return self.command_string
+
 
 class IType(BaseCommand):
-    def __init__(self, command: str, destination: str, immediate, source: str = None):
+    def __init__(
+        self,
+        command: str,
+        destination: str,
+        immediate,
+        source: str = None,
+        command_str="",
+    ):
         """Stores I_Type commands
         
         Parameters
@@ -37,15 +48,12 @@ class IType(BaseCommand):
         source : str, optional
             Name of source register, by default None
         """
-        super().__init__()
+        super().__init__(command_str)
         self.command = command
         self.destination_register = create_register(destination)
         self.source_register = create_register(source)
         self.immediate = create_immediate(immediate)
         self.func = get_command(self)
-
-    def __repr__(self):
-        return f"IType({self.command} {self.destination_register}, {self.source_register}, {self.immediate})"
 
 
 class RType(BaseCommand):
@@ -56,6 +64,7 @@ class RType(BaseCommand):
         source_register: str = None,
         target_register: str = None,
         shamt: int = 0,
+        command_str="",
     ):
         """Stores R_Type commands
         
@@ -72,7 +81,7 @@ class RType(BaseCommand):
         shamt : int, optional
             Shift amount, by default 0
         """
-        super().__init__()
+        super().__init__(command_str)
         self.command = command
         self.destination_register = create_register(destination)
         self.source_register = create_register(source_register)
@@ -80,12 +89,9 @@ class RType(BaseCommand):
         self.shamt = shamt
         self.func = get_command(self)
 
-    def __repr__(self):
-        return f"RType({self.command} {self.destination_register}, {self.source_register}, {self.target_register})"
-
 
 class JType(BaseCommand):
-    def __init__(self, command: str, address):
+    def __init__(self, command: str, address, command_str=""):
         """Stores J Type commands
         
         Parameters
@@ -95,12 +101,10 @@ class JType(BaseCommand):
         address : not sure yet
             TODO
         """
-        super().__init__()
+        super().__init__(command_str)
         self.command = command
         self.address = address
-
-    def __repr__(self):
-        return f"RType({self.command}, {self.address})"
+        self.func = get_command(self)
 
 
 def unpack(contents) -> list:

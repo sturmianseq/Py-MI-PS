@@ -15,6 +15,7 @@ class Memory:
 
     @staticmethod
     def change(old: bytes, new: bytes, address: int):
+        return
         print(f"\tMemory {address} changed from {old} to {new}")
 
     @staticmethod

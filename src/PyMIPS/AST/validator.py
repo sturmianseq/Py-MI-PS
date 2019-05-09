@@ -12,6 +12,7 @@ def validate(instruction) -> bool:
         Valid or not valid
     """
     switch = {
+        # R Type instructions 
         "add": validate_3_rtype,
         "addu": validate_3_rtype,
         "and": validate_3_rtype,
@@ -38,7 +39,6 @@ def validate(instruction) -> bool:
         "li": validate_1_itype,
         "move": validate_2_rtype,
         "sw": validate_optional_2_itype,
-        
         "lw": validate_optional_2_itype,
     }
     try:
@@ -50,6 +50,18 @@ def validate(instruction) -> bool:
 
 
 def validate_3_rtype(instruction) -> bool:
+    """Validates R-Type instructions with 3 registers 
+    
+    Parameters
+    ----------
+    instruction : [R-Type]
+        [description]
+    
+    Returns
+    -------
+    bool
+        [Syntax correct or not]
+    """
     rd = instruction.destination_register
     rs = instruction.source_register
     rt = instruction.target_register

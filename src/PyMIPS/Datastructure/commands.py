@@ -39,6 +39,18 @@ def get_command(ast_class):
         "beqz": beqz_command,
         "bne": bne_command,
         "bnez": bnez_command,
+        "nor": unimplemented,
+        "or": unimplemented,
+        "sll": unimplemented,
+        "slt": unimplemented,
+        "sltu": unimplemented,
+        "sra": unimplemented,
+        "srav": unimplemented,
+        "divu": unimplemented,
+        "jalr": unimplemented,
+        "multu": unimplemented,
+        "mthi": unimplemented,
+        "mtlo": unimplemented,
     }[ast_class.command](ast_class)
 
 

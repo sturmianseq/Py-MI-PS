@@ -35,7 +35,9 @@ class Register:
         return f"Register({self.name}, {str(self.get_contents_as_int())})"
 
     def set_contents_from_int(self, value: int):
-        self.__contents = value.to_bytes(4, "big", signed=True)
+        b = value.to_bytes(5, "big", signed=True)
+        self.__contents = b[-4:]
+        assert len(self.__contents) == 4
         self.change()
 
     def set_contents_from_bytes(self, value: bytes):
@@ -52,6 +54,7 @@ class Register:
         return self.__contents
 
     def change(self):
+        return
         old = int.from_bytes(self.__old, "big")
         new = int.from_bytes(self.__contents, "big")
         print(f"\tRegister {self.name} changed from {old} to {new}")
@@ -67,7 +70,7 @@ class RegisterPool:
     @staticmethod
     def print_all_active_registers():
         for key in RegisterPool.__registers:
-            print(RegisterPool.__registers[key])
+            print(f"\t{RegisterPool.__registers[key]}")
 
     @staticmethod
     def get_register(name: str) -> Register:
@@ -80,10 +83,16 @@ class RegisterPool:
 
 
 def create_immediate(value) -> Immediate:
+    try:
+        new = int(value)
+        value = new
+    except:
+        pass
     if type(value) == int:
         return Immediate(lambda: value)
     if type(value) == str:
         return RefImmediate(value)
+
     return None
 
 
@@ -154,6 +163,18 @@ class DataHeap:
     __refs = {}
 
     @staticmethod
+    def reset():
+        DataHeap.__next_address = 0
+        DataHeap.__refs.clear()
+
+    @staticmethod
+    def store_space(label: str, size: int):
+        DataHeap.__next_address -= size
+        for i in range(size):
+            Memory.store_byte(bytes(0), DataHeap.__next_address + i)
+        DataHeap.__refs[label] = (DataHeap.__next_address, size)
+
+    @staticmethod
     def alloc(heap_size: int):
         DataHeap.__next_address = Memory.alloc(heap_size)
 
@@ -168,6 +189,18 @@ class DataHeap:
             Memory.store_word(value, address)
 
     @staticmethod
+    def store_asciiz(value: str, label: str):
+        if label not in DataHeap.__refs.keys():
+            size = len(value) + 1
+            size = size + 4 - (size % 4)
+            DataHeap.__next_address -= size
+            Memory.store_asciiz(value, DataHeap.__next_address)
+            DataHeap.__refs[label] = (DataHeap.__next_address, size)
+        else:
+            address, _ = DataHeap.__refs[label]
+            Memory.store_word(value, address)
+
+    @staticmethod
     def get_address(label: str):
         if label in DataHeap.__refs.keys():
             return DataHeap.__refs[label][0]
@@ -175,6 +208,8 @@ class DataHeap:
 
     @staticmethod
     def get_value(label: str) -> bytes:
+        if label not in DataHeap.__refs:
+            raise Exception(f"Invalid immediate: {label}")
         address, size = DataHeap.__refs[label]
         b = []
         for i in range(size):
@@ -189,3 +224,64 @@ class DataHeap:
     @staticmethod
     def print():
         print(DataHeap.__refs)
+
+
+class ProgramStack:
+    __labels = {}
+    __instructions = {}
+    __next_address = 0
+    __pc = create_register("$pc")
+
+    @staticmethod
+    def reset():
+        ProgramStack.__labels.clear()
+        ProgramStack.__instructions.clear()
+        ProgramStack.__next_address = 0
+        ProgramStack.__program_counter = 0
+
+    @staticmethod
+    def move_pc(amount: int):
+        old = ProgramStack.__pc.get_contents_as_int()
+        ProgramStack.__pc.set_contents_from_int(old + amount)
+
+    @staticmethod
+    def jump_label(label: str):
+        if label not in ProgramStack.__labels:
+            raise Exception(f"Can't jump to invalid label: {label}")
+        ProgramStack.__pc.set_contents_from_int(ProgramStack.__labels[label])
+
+    @staticmethod
+    def add_instruction(instruction):
+        ProgramStack.__instructions[ProgramStack.__next_address] = instruction
+        ProgramStack.__next_address += 4
+
+    @staticmethod
+    def execute_instruction(address):
+        if address in ProgramStack.__instructions.keys():
+            i = ProgramStack.__instructions[address]
+            # print(f"{address}: {i}")
+            i()
+        else:
+            raise Exception("Invalid instruction address")
+
+    @staticmethod
+    def execute_next():
+        next_inst = ProgramStack.__pc.get_contents_as_int()
+        ProgramStack.execute_instruction(next_inst)
+        next_inst = ProgramStack.__pc.get_contents_as_int()
+        next_inst += 4
+        ProgramStack.__pc.set_contents_from_int(next_inst)
+
+    @staticmethod
+    def add_label(label):
+        name = label.name
+        instructions = label.contents
+        ProgramStack.__labels[name] = ProgramStack.__next_address
+        for i in instructions:
+            ProgramStack.add_instruction(i)
+
+    @staticmethod
+    def add_text_block(block):
+        for l in block.contents:
+            ProgramStack.add_label(l)
+

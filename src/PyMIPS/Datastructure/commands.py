@@ -14,8 +14,10 @@ def get_command(ast_class):
         "mflo": mflo_command,
         "mfhi": mfhi_command,
         "div": div_command,
-        "move": move_command
+        "move": move_command,
+        "addi": addi_command,
     }[ast_class.command](ast_class)
+
 
 def move_command(command):
     def exe():
@@ -112,6 +114,19 @@ def sw_command(command):
         return store_on_stack
     else:
         return store_into_label
+
+
+def addi_command(command):
+    """
+    addi $dest, $targ, immediate
+    """
+
+    def exe():
+        dest = command.destination_register
+        res = command.target_register.get_contents() + command.immediate()
+        dest.set_contents(lambda: res)
+
+    return exe
 
 
 def syscall_command(command):

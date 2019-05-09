@@ -4,7 +4,7 @@ import unittest
 
 
 class TestRType(unittest.TestCase):
-    def test_3(self):
+    def test_all(self):
         try:
             RType("add", "$t3", "$t2", "$t1")
             RType("addu", "$t3", "$t2", "$t1")
@@ -42,6 +42,8 @@ class TestRType(unittest.TestCase):
             RType("move", "$3", "t435", "$vew")
         with self.assertRaises(Exception):
             RType("lw", "$t3", "$s4", "gfd4")
+        with self.assertRaises(Exception):
+            RType("", "$t3")
 
     def test_bad_2(self):
         with self.assertRaises(Exception):
@@ -52,6 +54,12 @@ class TestRType(unittest.TestCase):
             RType("mul", "$t3", "4")
         with self.assertRaises(Exception):
             RType("jalr", "$t3")
+
+    def test_bad_1(self):
+        with self.assertRaises(Exception):
+            RType("mfhi", "$t3", "$t4")
+        with self.assertRaises(Exception):
+            RType("mflo")
 
 
 class TestIType(unittest.TestCase):

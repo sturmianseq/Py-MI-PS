@@ -39,6 +39,7 @@ def get_command(ast_class):
         "beqz": beqz_command,
         "bne": bne_command,
         "bnez": bnez_command,
+        # Unimplemented r-types
         "nor": unimplemented,
         "or": unimplemented,
         "sll": unimplemented,
@@ -51,6 +52,26 @@ def get_command(ast_class):
         "multu": unimplemented,
         "mthi": unimplemented,
         "mtlo": unimplemented,
+        # Unimplemented i-types
+        "addi": unimplemented,
+        "addiu": unimplemented,
+        "andi": unimplemented,
+        "beq": unimplemented,
+        "bgez": unimplemented,
+        "blez": unimplemented,
+        "lb": unimplemented,
+        "lbu": unimplemented,
+        "lh": unimplemented,
+        "lhu": unimplemented,
+        "lui": unimplemented,
+        "lwc1": unimplemented,
+        "ori": unimplemented,
+        "sb": unimplemented,
+        "slti": unimplemented,
+        "sltiu": unimplemented,
+        "sh": unimplemented,
+        "swc1": unimplemented,
+        "xori": unimplemented,
     }[ast_class.command](ast_class)
 
 

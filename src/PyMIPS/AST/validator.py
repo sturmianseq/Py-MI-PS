@@ -12,13 +12,34 @@ def validate(instruction) -> bool:
         Valid or not valid
     """
     switch = {
-        "lw": validate_optional_2_type,
-        "li": validate_1_itype,
-        "sw": validate_optional_2_type,
         "add": validate_3_rtype,
+        "addu": validate_3_rtype,
+        "and": validate_3_rtype,
+        "nor": validate_3_rtype,
+        "or": validate_3_rtype,
+        "sll": validate_3_rtype,
+        "slt": validate_3_rtype,
+        "sltu": validate_3_rtype,
+        "sra": validate_3_rtype,
+        "srav": validate_3_rtype,
         "sub": validate_3_rtype,
+        "subu": validate_3_rtype,
+        "xor": validate_3_rtype,
         "div": validate_2_rtype,
+        "divu": validate_2_rtype,
+        "jalr": validate_2_rtype,
+        "mult": validate_2_rtype,
+        "multu": validate_2_rtype,
+        "mfhi": validate_1_rtype,
+        "mflo": validate_1_rtype,
+        "mthi": validate_1_rtype,
+        "mtlo": validate_1_rtype,
+        "syscall": validate_0_rtype,
+        "li": validate_1_itype,
         "move": validate_2_rtype,
+        "sw": validate_optional_2_itype,
+        
+        "lw": validate_optional_2_itype,
     }
     try:
         func = switch[instruction.command]
@@ -64,6 +85,18 @@ def validate_1_rtype(instruction) -> bool:
     return check1 and check2 and check3
 
 
+def validate_0_rtype(instruction) -> bool:
+    rd = instruction.destination_register
+    rs = instruction.source_register
+    rt = instruction.target_register
+
+    check1 = rd is None
+    check2 = rs is None
+    check3 = rt is None
+
+    return check1 and check2 and check3
+
+
 def validate_2_itype(instruction) -> bool:
     destination = instruction.destination_register
     source = instruction.source_register
@@ -79,7 +112,7 @@ def validate_2_itype(instruction) -> bool:
     return check1 and check2 and check3 and check4
 
 
-def validate_optional_2_type(instruction) -> bool:
+def validate_optional_2_itype(instruction) -> bool:
     destination = instruction.destination_register
     source = instruction.source_register
     target = instruction.target_register

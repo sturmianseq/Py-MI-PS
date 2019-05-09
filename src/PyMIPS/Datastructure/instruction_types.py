@@ -1,12 +1,13 @@
 from PyMIPS.Datastructure.commands import get_command
 from PyMIPS.Datastructure.data_model import create_register, create_immediate
+from PyMIPS.AST.validator import validate
 
 
 class BaseCommand:
     def __init__(self):
         """Base Command Class
-        move $dest, $targ
-        add $dest, $targ, $source
+        move $dest, $source
+        add $dest, $source, $targ
         li $dest, immediate
         """
         self.command = None
@@ -42,6 +43,8 @@ class IType(BaseCommand):
         self.destination_register = create_register(destination)
         self.source_register = create_register(source)
         self.immediate = create_immediate(immediate)
+        if not validate(self):
+            raise Exception("Invalid Syntax")
         self.func = get_command(self)
 
     def __repr__(self):
@@ -78,6 +81,8 @@ class RType(BaseCommand):
         self.source_register = create_register(source_register)
         self.target_register = create_register(target_register)
         self.shamt = shamt
+        if not validate(self):
+            raise Exception("Invalid Syntax")
         self.func = get_command(self)
 
     def __repr__(self):
@@ -98,6 +103,9 @@ class JType(BaseCommand):
         super().__init__()
         self.command = command
         self.address = address
+        if not validate(self):
+            raise Exception("Invalid Syntax")
+        self.func = get_command(self)
 
     def __repr__(self):
         return f"RType({self.command}, {self.address})"

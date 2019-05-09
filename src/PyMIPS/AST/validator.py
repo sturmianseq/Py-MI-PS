@@ -136,17 +136,15 @@ def validate_2_itype(instruction) -> bool:
 
 def validate_optional_2_itype(instruction) -> bool:
     destination = instruction.destination_register
-    source = instruction.source_register
     target = instruction.target_register
     immediate = instruction.immediate
 
     check1 = destination is not None
-    check2 = source is not None or None
     check3 = immediate is not None
     check4 = target is None
-    print(check1, check2, check3, check4)
+    print(check1, check3, check4)
 
-    return check1 and check2 and check3 and check4
+    return check1 and check3 and check4
 
 
 def validate_1_itype(instruction) -> bool:

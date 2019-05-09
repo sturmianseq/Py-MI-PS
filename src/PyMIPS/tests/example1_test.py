@@ -8,8 +8,8 @@ def test_example1():
     try:
         DataStack.alloc(1024)
         DataHeap.alloc(1024)
-        DataHeap.store(12, "value")
-        DataHeap.store(0, "Z")
+        DataHeap.store_word(12, "value")
+        DataHeap.store_word(0, "Z")
         exe = [0, 1, 2, 3, 4, 5]
         exe[0] = IType("li", "$t2", 25)
         exe[1] = IType("lw", "$t3", "value")
@@ -20,5 +20,4 @@ def test_example1():
         res = run_from_list(exe) == True
     except:
         res = False
-
     assert res

@@ -10,6 +10,10 @@ if __name__ == "__main__":
     with open(filename) as file:
         characters = file.read()
     tokens = lex(characters)
-    res = parse(tokens)
+    try:
+        res = parse(tokens)
+    except Exception as e:
+        print(e)
+        sys.exit(1)
     run_program(res.value)
 

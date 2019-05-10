@@ -84,9 +84,12 @@ class TestIType(unittest.TestCase):
             IType("sw", "$t0", -4, "$sp")
             IType("lw", "$t3", 5)
             IType("la", "$t3", 543)
-            IType("la", "$t3", 5453)
+            IType("la", "$t3", 5453, "$t2")
             IType("li", "$t0", 4)
             IType("bne", "$t0", "$t5", "label")
+            IType("bltz", "$t3", "label")
+            IType("lui", "$t3", 100)
+            IType("tgei", "$t3", 100)
 
         except:
             self.fail()
@@ -100,9 +103,35 @@ class TestIType(unittest.TestCase):
             IType("lw", "t32", immediate=None)
         with self.assertRaises(Exception):
             IType("addi", "$t2", "5", "$t44")
+        with self.assertRaises(Exception):
+            IType("la", "$t2", 5, "$t44")
 
     def test_bad_1(self):
         with self.assertRaises(Exception):
             IType("li", "$t3", source="$t2")
         with self.assertRaises(Exception):
             IType("li", source="$t2")
+        with self.assertRaises(Exception):
+            IType("lui", "100", 100)
+        with self.assertRaises(Exception):
+            IType("la", "$t3f", 34)
+        with self.assertRaises(Exception):
+            IType("tgi", "$t3f", 34)
+
+
+class TestJType(unittest.TestCase):
+    def test_all(self):
+        try:
+            JType("j", "func1")
+            JType("jal", "func2")
+            JType("jal", 1)
+        except:
+            self.fail()
+
+    def test_bad(self):
+        with self.assertRaises(Exception):
+            JType("add", "funct1")
+        with self.assertRaises(Exception):
+            JType("j")
+        with self.assertRaises(Exception):
+            JType("jal")

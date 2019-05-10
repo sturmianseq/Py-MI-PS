@@ -16,7 +16,7 @@ main:
 	sub $t5, $t2, $t3	# Subtract
 	addi $t2, $t1, 5
 	beq $t2, $t1, label
-	bne $t3, $t2, label
+	la $t4, 200
 	sw $t5, Z		#Store the answer in Z (declared at the bottom)  
 	sw $t4, 4($sp)
 label:

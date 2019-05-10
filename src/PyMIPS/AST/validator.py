@@ -64,7 +64,6 @@ def validate(instruction) -> bool:
         "slti": validate_2_itype,
         "sltiu": validate_2_itype,
         "xori": validate_2_itype,
-        "xori": validate_2_itype,
         "li": validate_1_itype,
         "la": validate_1_itype,
         "bgezal": validate_1_itype,
@@ -101,7 +100,39 @@ def validate(instruction) -> bool:
         res = False
     return res
 
+list_of_registers = (
+    "$zero",
+    "$at",
+    "$v0",
+    "$v1",
+    "$a0",
+    "$a1",
+    "$a2",
+    "$a3",
+    "$t0",
+    "$t1",
+    "$t2",
+    "$t3",
+    "$t4",
+    "$t5",
+    "$t6",
+    "$t7",
+    "$s0",
+    "$s1",
+    "$s2",
+    "$s3",
+    "$s4",
+    "$s5",
+    "$s6",
+    "$s7",
+    "$t8",
+    "$t9",
+    "$sp",
+    "$ra",
+    "hi",
+    "lo",
 
+)
 def validate_3_rtype(instruction) -> bool:
     """Validates R-Type instructions with 3 registers 
     
@@ -122,7 +153,7 @@ def validate_3_rtype(instruction) -> bool:
     check1 = rd is not None
     check2 = rs is not None
     check3 = rt is not None
-
+    print(rd.name)
     return check1 and check2 and check3
 
 

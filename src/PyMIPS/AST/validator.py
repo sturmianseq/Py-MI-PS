@@ -100,9 +100,9 @@ def validate(instruction) -> bool:
         res = False
     return res
 
+
 list_of_registers = (
     "$zero",
-    "$at",
     "$v0",
     "$v1",
     "$a0",
@@ -131,8 +131,9 @@ list_of_registers = (
     "$ra",
     "hi",
     "lo",
-
 )
+
+
 def validate_3_rtype(instruction) -> bool:
     """Validates R-Type instructions with 3 registers 
     
@@ -153,8 +154,14 @@ def validate_3_rtype(instruction) -> bool:
     check1 = rd is not None
     check2 = rs is not None
     check3 = rt is not None
-    print(rd.name)
-    return check1 and check2 and check3
+
+    if (
+        rd.name in list_of_registers
+        and rs.name in list_of_registers
+        and rt.name in list_of_registers
+    ):
+        return check1 and check2 and check3
+    return False
 
 
 def validate_2_rtype(instruction) -> bool:
@@ -166,7 +173,9 @@ def validate_2_rtype(instruction) -> bool:
     check2 = rs is not None
     check3 = rt is None
 
-    return check1 and check2 and check3
+    if rd.name in list_of_registers and rs.name in list_of_registers:
+        return check1 and check2 and check3
+    return False
 
 
 def validate_1_rtype(instruction) -> bool:
@@ -178,7 +187,9 @@ def validate_1_rtype(instruction) -> bool:
     check2 = rs is None
     check3 = rt is None
 
-    return check1 and check2 and check3
+    if rd.name in list_of_registers:
+        return check1 and check2 and check3
+    return False
 
 
 def validate_0_rtype(instruction) -> bool:
@@ -202,9 +213,21 @@ def validate_2_itype(instruction) -> bool:
     check1 = destination is not None
     check2 = source is not None
     check3 = immediate is not None
-    check4 = target is None
-
-    return check1 and check2 and check3 and check4
+    if instruction.command in ("beq", "bne") and isinstance(immediate._value, str):
+        if destination.name in list_of_registers:
+            return check1 and check2 and check3
+    elif instruction.command in ("beq", "bne") and isinstance(immediate(), int):
+        print(destination, immediate, source, target)
+        if destination.name in list_of_registers:
+            return check1 and check2 and check3
+    else:
+        if (
+            destination.name in list_of_registers
+            and isinstance(immediate(), int)
+            and source.name in list_of_registers
+        ):
+            return check1 and check2 and check3
+    return False
 
 
 def validate_optional_2_itype(instruction) -> bool:

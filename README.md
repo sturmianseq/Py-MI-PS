@@ -14,17 +14,15 @@ Example code courtesy of [University Of The Pacific]
 
 ## Installation
 
-You can install using pip:
+See [releases] for installation instructions
 
-```
-pip install pymips
-```
+[releases]: https://github.com/AshtonUPS/Py-MI-PS/releases
 
 ## Usage
 
 Invoke PyMips with the pymips command from you python virtual environment:
 
-```
+```sh
 pymips <path to mips file>
 ```
 

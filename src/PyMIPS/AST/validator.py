@@ -65,7 +65,7 @@ def validate(instruction) -> bool:
         "sltiu": validate_2_itype,
         "xori": validate_2_itype,
         "li": validate_1_itype,
-        "la": validate_1_itype,
+        "la": validate_optional_2_itype,
         "bgezal": validate_1_itype,
         "beqz": validate_1_itype,
         "bgez": validate_1_itype,
@@ -92,6 +92,9 @@ def validate(instruction) -> bool:
         "lhu": validate_optional_2_itype,
         "sb": validate_optional_2_itype,
         "sh": validate_optional_2_itype,
+        # J-Type Instructions
+        "j": validate_jtype,
+        "jal": validate_jtype,
     }
     try:
         func = switch[instruction.command]
@@ -207,17 +210,12 @@ def validate_0_rtype(instruction) -> bool:
 def validate_2_itype(instruction) -> bool:
     destination = instruction.destination_register
     source = instruction.source_register
-    target = instruction.target_register
     immediate = instruction.immediate
 
     check1 = destination is not None
     check2 = source is not None
     check3 = immediate is not None
     if instruction.command in ("beq", "bne") and isinstance(immediate._value, str):
-        if destination.name in list_of_registers:
-            return check1 and check2 and check3
-    elif instruction.command in ("beq", "bne") and isinstance(immediate(), int):
-        print(destination, immediate, source, target)
         if destination.name in list_of_registers:
             return check1 and check2 and check3
     else:
@@ -233,13 +231,19 @@ def validate_2_itype(instruction) -> bool:
 def validate_optional_2_itype(instruction) -> bool:
     destination = instruction.destination_register
     target = instruction.target_register
+    source = instruction.source_register
     immediate = instruction.immediate
 
     check1 = destination is not None
-    check3 = immediate is not None
-    check4 = target is None
+    check2 = immediate is not None
+    check3 = target is None
 
-    return check1 and check3 and check4
+    if destination.name in list_of_registers:
+        if source is not None and source.name in list_of_registers:
+            return check1 and check2 and check3
+        elif source is None:
+            return check1 and check2 and check3
+    return False
 
 
 def validate_1_itype(instruction) -> bool:
@@ -253,5 +257,14 @@ def validate_1_itype(instruction) -> bool:
     check3 = immediate is not None
     check4 = source is None
 
-    return check1 and check2 and check3 and check4
+    if destination.name in list_of_registers:
+        return check1 and check2 and check3 and check4
+    return False
+
+
+def validate_jtype(instruction) -> bool:
+    address = instruction.address
+    check = address is not None
+
+    return check
 

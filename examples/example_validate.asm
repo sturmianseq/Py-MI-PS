@@ -14,8 +14,12 @@ main:
 	lw $t3, value		# Load the word stored in value (see bottom)
 	add $t4, $t2, $t3	# Add
 	sub $t5, $t2, $t3	# Subtract
+	addi $t2, $t1, 5
+	beq $t2, $t1, label
+	bne $t3, $t2, label
 	sw $t5, Z		#Store the answer in Z (declared at the bottom)  
 	sw $t4, 4($sp)
+label:
 
 	# Exit the program by means of a syscall.
 	# There are many syscalls - pick the desired one

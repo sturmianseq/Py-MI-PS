@@ -55,7 +55,7 @@ class IType(BaseCommand):
         self.source_register = create_register(source)
         self.immediate = create_immediate(immediate)
         if not validate(self):
-            raise Exception("Invalid Syntax")
+            raise Exception("Seg Fault :p")
         self.func = get_command(self)
 
 
@@ -91,7 +91,7 @@ class RType(BaseCommand):
         self.target_register = create_register(target_register)
         self.shamt = shamt
         if not validate(self):
-            raise Exception("Invalid Syntax")
+            raise Exception("Seg Fault :p")
         self.func = get_command(self)
 
 
@@ -110,7 +110,7 @@ class JType(BaseCommand):
         self.command = command
         self.address = address
         if not validate(self):
-            raise Exception("Invalid Syntax")
+            raise Exception("Seg Fault :p")
         self.func = get_command(self)
 
 

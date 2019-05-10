@@ -106,7 +106,8 @@ class TestITypes(unittest.TestCase):
         t1 = RegisterPool.get_register("$t1")
         t1.set_contents_from_int(4)
         i()
-        self.assertEqual(t0.get_contents_as_int(), 16)
+        # changed from 16 to 20 to test i-types that I am doing
+        self.assertEqual(t0.get_contents_as_int(), 20)
 
     def test_srl(self):
         # TODO: srl

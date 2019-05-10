@@ -99,6 +99,7 @@ commands = [
     r"sw\s",
     r"j\s",
     r"li\s",
+    r"bge\s",
 ]
 registers = [r"[$][^\s,)]+"]
 

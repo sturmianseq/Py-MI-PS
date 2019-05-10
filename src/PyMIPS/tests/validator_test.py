@@ -23,7 +23,7 @@ class TestRType(unittest.TestCase):
             RType("divu", "$t3", "$t2")
             RType("jalr", "$t3", "$t2")
             RType("mult", "$t3", "$t2")
-            RType("multu", "$t3", "$t2")
+            RType("mul", "$t3", "$t2")
             RType("move", "$t3", "$t2")
             RType("jr", "$ra")
             RType("mfhi", "$t3")
@@ -44,7 +44,7 @@ class TestRType(unittest.TestCase):
         with self.assertRaises(Exception):
             RType("lw", "$t3", "$s4", "gfd4")
         with self.assertRaises(Exception):
-            RType("", "$t3")
+            RType(6, "$t3")
 
     def test_bad_2(self):
         with self.assertRaises(Exception):
@@ -52,7 +52,7 @@ class TestRType(unittest.TestCase):
         with self.assertRaises(Exception):
             RType("div", "$t3")
         with self.assertRaises(Exception):
-            RType("mul", "$t3", "4")
+            RType("mul", "$")
         with self.assertRaises(Exception):
             RType("jalr", "$t3")
 
@@ -70,30 +70,23 @@ class TestRType(unittest.TestCase):
 class TestIType(unittest.TestCase):
     def test_all(self):
         try:
-            IType("add", "$t3", "$t2", "$t1")
-            IType("addu", "$t3", "$t2", "$t1")
-            IType("and", "$t3", "$t2", "$t1")
-            IType("nor", "$t3", "$t2", "$t1")
-            IType("add", "$t3", "$t2", "$t1")
-            IType("addu", "$t3", "$t2", "$t1")
-            IType("and", "$t3", "$t2", "$t1")
-            IType("nor", "$t3", "$t2", "$t1")
-            IType("add", "$t3", "$t2", "$t1")
-            IType("addu", "$t3", "$t2", "$t1")
-            IType("and", "$t3", "$t2", "$t1")
-            IType("nor", "$t3", "$t2", "$t1")
-            IType("add", "$t3", "$t2", "$t1")
-            IType("addu", "$t3", "$t2", "$t1")
-            IType("and", "$t3", "$t2", "$t1")
-            IType("nor", "$t3", "$t2", "$t1")
-            IType("add", "$t3", "$t2", "$t1")
-            IType("addu", "$t3", "$t2", "$t1")
-            IType("and", "$t3", "$t2", "$t1")
-            IType("nor", "$t3", "$t2", "$t1")
-            IType("add", "$t3", "$t2", "$t1")
-            IType("addu", "$t3", "$t2", "$t1")
-            IType("and", "$t3", "$t2", "$t1")
-            IType("nor", "$t3", "$t2", "$t1")
+            IType("addi", "$t3", "$t2", "6")
+            IType("addiu", "$t3", "$t2", "6")
+            IType("andi", "$t3", "$t2", "6")
+            IType("beq", "$t3", "$t2", "6")
+            IType("bne", "$t3", "$t2", "6")
+            IType("ori", "$t3", "$t2", "6")
+            IType("slti", "$t3", "$t2", "6")
+            IType("sltiu", "$t3", "$t2", "6")
+            IType("xori", "$t3", "$t2", "6")
+            IType("bgez", "$t3", "label")
+            IType("sw", "$t0", -4, "$sp")
+            IType("lw", "$t3", 5)
+            IType("la", "$t3", 543)
+            IType("la", "$t3", 5453)
+            IType("li", "$t0", 4)
+            IType("bne", "$t0", 1000, "label")
+
         except:
             self.fail()
 
@@ -104,13 +97,6 @@ class TestIType(unittest.TestCase):
             IType("add", "$t32")
         with self.assertRaises(Exception):
             IType("lw", "t32", immediate=None)
-
-    def test_2(self):
-        try:
-            IType("li", "$t0", 4)
-            IType("sw", "$t0", -4, "$sp")
-        except:
-            self.fail()
 
     def test_bad_2(self):
         with self.assertRaises(Exception):

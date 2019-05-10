@@ -20,7 +20,7 @@ See [releases] for installation instructions
 
 ## Usage
 
-Invoke PyMips with the pymips command from you python virtual environment:
+Invoke PyMips with the pymips command from your python virtual environment:
 
 ```sh
 pymips <path to mips file>

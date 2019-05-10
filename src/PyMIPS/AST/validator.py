@@ -18,13 +18,13 @@ def validate(instruction) -> bool:
         "and": validate_3_rtype,
         "nor": validate_3_rtype,
         "or": validate_3_rtype,
-        "sll": validate_3_rtype,
+        "sll": validate_2_itype,
         "sllv": validate_3_rtype,
         "slt": validate_3_rtype,
         "sltu": validate_3_rtype,
-        "sra": validate_3_rtype,
+        "sra": validate_2_itype,
         "srav": validate_3_rtype,
-        "srl": validate_3_rtype,
+        "srl": validate_2_itype,
         "srlv": validate_3_rtype,
         "sub": validate_3_rtype,
         "subu": validate_3_rtype,
@@ -215,7 +215,9 @@ def validate_2_itype(instruction) -> bool:
     check1 = destination is not None
     check2 = source is not None
     check3 = immediate is not None
-    if instruction.command in ("beq", "bne") and isinstance(immediate._value, str):
+    if instruction.command in ("beq", "bne", "sll", "srl", "sra") and isinstance(
+        immediate._value, str
+    ):
         if destination.name in list_of_registers:
             return check1 and check2 and check3
     else:

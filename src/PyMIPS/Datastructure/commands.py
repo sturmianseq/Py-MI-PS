@@ -58,7 +58,6 @@ def get_command(ast_class):
         "msubu": unimplemented,
         "nop": unimplemented,
         # Unimplemented i-types
-        "addi": unimplemented,
         "addiu": unimplemented,
         "andi": unimplemented,
         "bgez": unimplemented,

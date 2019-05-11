@@ -133,7 +133,14 @@ class TestRTypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), 504)
 
     def test_xor(self):
-        pass
+        r = RType("xor", "$t0", "$s0", "$s1")
+        t0 = RegisterPool.get_register("$t0")
+        s0 = RegisterPool.get_register("$s0")
+        s1 = RegisterPool.get_register("$s1")
+        s0.set_contents_from_int(4651)
+        s1.set_contents_from_int(65)
+        r()
+        self.assertEqual(t0.get_contents_as_int(), 4714)
 
     def test_nor(self):
         pass

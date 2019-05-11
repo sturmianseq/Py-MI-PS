@@ -71,6 +71,16 @@ class TestRTypes(unittest.TestCase):
         pass
 
     def test_div(self):
+        # r = RType("div", "$t0", "$t1")
+        # t0 = RegisterPool.get_register("$t0")
+        # t1 = RegisterPool.get_register("$t1")
+        # t0.set_contents_from_int(651)
+        # t1.set_contents_from_int(213)
+        # r()
+        # quo = RegisterPool.get_register("mflo")
+        # rem = RegisterPool.get_register("mfhi")
+        # self.assertEqual(quo, 3)
+        # self.assertEqual(rem, 12)
         pass
 
     def test_divu(self):
@@ -103,7 +113,14 @@ class TestRTypes(unittest.TestCase):
         pass
 
     def test_and(self):
-        pass
+        r = RType("and", "$t0", "$s0", "$s1")
+        t0 = RegisterPool.get_register("$t0")
+        s0 = RegisterPool.get_register("$s0")
+        s1 = RegisterPool.get_register("$s1")
+        s0.set_contents_from_int(60)
+        s1.set_contents_from_int(13)
+        r()
+        self.assertEqual(t0.get_contents_as_int(), 12)
 
     def test_or(self):
         pass

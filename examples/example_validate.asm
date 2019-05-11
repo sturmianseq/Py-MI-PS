@@ -17,6 +17,7 @@ main:
 	addi $t2, $t1, 5
 	andi $t1, $t2, 4
 	beq $t4, $t5, label
+	div $t5, $t2
 	la $t4, 200
 	sw $t5, Z		#Store the answer in Z (declared at the bottom)  
 	sw $t4, 4($sp)

@@ -336,7 +336,6 @@ def lw_command(command):
 def mflo_command(command):
     def exe():
         mflo = RegisterPool.get_register("$mflo")
-        print(mflo)
         command.destination_register.set_contents_from_bytes(
             mflo.get_contents_as_bytes()
         )
@@ -357,17 +356,17 @@ def mfhi_command(command):
 def div_command(command):
     def exe():
         quotient_res = (
-            command.source_register.get_contents()
-            // command.destination_register.get_contents()
+            command.source_register.get_contents_as_int()
+            // command.destination_register.get_contents_as_int()
         )
         remainder_res = (
-            command.source_register.get_contents()
-            % command.destination_register.get_contents()
+            command.source_register.get_contents_as_int()
+            % command.destination_register.get_contents_as_int()
         )
         mfhi = RegisterPool.get_register("$mfhi")
         mflo = RegisterPool.get_register("$mflo")
-        mfhi.set_contents(lambda: remainder_res)
-        mflo.set_contents(lambda: quotient_res)
+        mfhi.set_contents_from_int(lambda: remainder_res)
+        mflo.set_contents_from_int(lambda: quotient_res)
 
     return exe
 

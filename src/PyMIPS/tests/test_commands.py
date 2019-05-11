@@ -90,7 +90,14 @@ class TestRTypes(unittest.TestCase):
         pass
 
     def test_sub(self):
-        pass
+        r = RType("sub", "$t0", "$t1", "$t3")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t3 = RegisterPool.get_register("$t3")
+        t1.set_contents_from_int(1000)
+        t3.set_contents_from_int(654)
+        r()
+        self.assertEqual(t0.get_contents_as_int(), 346)
 
     def test_subu(self):
         pass

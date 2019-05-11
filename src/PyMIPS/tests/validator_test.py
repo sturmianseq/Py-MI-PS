@@ -16,6 +16,7 @@ class TestRType(unittest.TestCase):
             RType("sub", "$t3", "$t2", "$t1")
             RType("subu", "$t3", "$t2", "$t1")
             RType("xor", "$t3", "$t2", "$t1")
+            RType("or", "$s0", "$t0", "$t3")
             RType("div", "$t3", "$t2")
             RType("divu", "$t3", "$t2")
             RType("jalr", "$t3", "$t2")

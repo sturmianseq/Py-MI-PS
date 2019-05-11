@@ -73,7 +73,7 @@ class TestIType(unittest.TestCase):
         try:
             IType("addi", "$t3", 6, "$t4")
             IType("addiu", "$t3", 6, "$t4")
-            IType("andi", "$t3", 6, "$t4")
+            IType("andi", "$t3", 0000, "$t4")
             IType("beq", "$t3", "label", "$t4")
             IType("ori", "$t3", 6, "$t1")
             IType("xori", "$t3", 6, "$t4")
@@ -83,7 +83,7 @@ class TestIType(unittest.TestCase):
             IType("la", "$t3", 543)
             IType("la", "$t3", 5453, "$t2")
             IType("li", "$t0", 4)
-            IType("bne", "$t0", "$t5", "label")
+            IType("bne", "$t0", "label", "$t8")
             IType("bltz", "$t3", "label")
             IType("lui", "$t3", 100)
             IType("tgei", "$t3", 100)

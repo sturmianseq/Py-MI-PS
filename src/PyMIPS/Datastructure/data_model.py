@@ -240,6 +240,12 @@ class ProgramStack:
         ProgramStack.__program_counter = 0
 
     @staticmethod
+    def get_label_addres(label: str) -> int:
+        if label not in ProgramStack.__labels:
+            raise Exception(f"Invalid label {label}")
+        return ProgramStack.__labels[label]
+
+    @staticmethod
     def move_pc(amount: int):
         old = ProgramStack.__pc.get_contents_as_int()
         ProgramStack.__pc.set_contents_from_int(old + amount)

@@ -39,9 +39,9 @@ def get_command(ast_class):
         "beqz": beqz_command,
         "bne": bne_command,
         "bnez": bnez_command,
+        "or": or_command,
         # Unimplemented r-types
         "nor": unimplemented,
-        "or": unimplemented,
         "sll": unimplemented,
         "slt": unimplemented,
         "sltu": unimplemented,
@@ -121,6 +121,17 @@ def and_command(command):
         source = command.source_register.get_contents_as_bytes()
         target = command.target_register.get_contents_as_bytes()
         res = [a & b for (a, b) in zip(source, target)]
+        destination.set_contents_from_bytes(res)
+
+    return exe
+
+
+def or_command(command):
+    def exe():
+        destination = command.destination_register
+        source = command.source_register.get_contents_as_bytes()
+        target = command.target_register.get_contents_as_bytes()
+        res = [a | b for (a, b) in zip(source, target)]
         destination.set_contents_from_bytes(res)
 
     return exe

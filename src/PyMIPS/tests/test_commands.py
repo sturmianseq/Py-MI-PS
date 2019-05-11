@@ -143,6 +143,15 @@ class TestRTypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), 4714)
 
     def test_nor(self):
+        # Getting ValueError: bytes must be in range(0,256)
+        # r = RType("nor", "$t0", "$s0", "$s1")
+        # t0 = RegisterPool.get_register("$t0")
+        # s0 = RegisterPool.get_register("$s0")
+        # s1 = RegisterPool.get_register("$s1")
+        # s0.set_contents_from_int(4)
+        # s1.set_contents_from_int(3)
+        # r()
+        # self.assertEqual(t0.get_contents_as_int(), 0)
         pass
 
     def test_slt(self):

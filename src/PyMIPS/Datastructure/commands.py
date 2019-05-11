@@ -81,7 +81,6 @@ def get_command(ast_class):
         "tlti": unimplemented,
         "tltiu": unimplemented,
         "tnei": unimplemented,
-        "xori": unimplemented,
     }[ast_class.command](ast_class)
 
 

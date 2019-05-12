@@ -71,7 +71,7 @@ def get_command(ast_class):
         "slti": unimplemented,
         "sltiu": unimplemented,
         "sh": unimplemented,
-        "xori": unimplemented,
+        "xori": xori_command,
         "ll": unimplemented,
         "sc": unimplemented,
         "swl": unimplemented,
@@ -110,6 +110,17 @@ def xor_command(command):
         source = command.source_register.get_contents_as_bytes()
         target = command.target_register.get_contents_as_bytes()
         res = [a ^ b for (a, b) in zip(source, target)]
+        destination.set_contents_from_bytes(res)
+
+    return exe
+
+
+def xori_command(command):
+    def exe():
+        destination = command.destination_register
+        source = command.source_register.get_contents_as_bytes()
+        immediate = command.immediate().to_bytes(5, "big", signed=True)
+        res = [a ^ b for (a, b) in zip(source, immediate[-4:])]
         destination.set_contents_from_bytes(res)
 
     return exe

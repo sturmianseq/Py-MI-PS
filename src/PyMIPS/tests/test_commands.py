@@ -66,17 +66,27 @@ class TestRTypes(unittest.TestCase):
         self.assertEqual(t1.get_contents_as_int(), hi.get_contents_as_int())
 
     def test_mthi(self):
-        pass
+        r = RType("mthi", "$t1")
+        t1 = RegisterPool.get_register("$t1")
+        t1.set_contents_from_int(342)
+        r()
+        hi = RegisterPool.get_register("hi")
+        self.assertEqual(t1.get_contents_as_int(), hi.get_contents_as_int())
 
     def test_mflo(self):
         r = RType("mflo", "$t1")
         t1 = RegisterPool.get_register("$t1")
         r()
-        lo = RegisterPool.get_register("hi")
+        lo = RegisterPool.get_register("lo")
         self.assertEqual(t1.get_contents_as_int(), lo.get_contents_as_int())
 
     def test_mtlo(self):
-        pass
+        r = RType("mtlo", "$t1")
+        t1 = RegisterPool.get_register("$t1")
+        t1.set_contents_from_int(564)
+        r()
+        lo = RegisterPool.get_register("lo")
+        self.assertEqual(t1.get_contents_as_int(), lo.get_contents_as_int())
 
     def test_mult(self):
         pass

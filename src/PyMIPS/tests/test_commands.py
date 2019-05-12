@@ -150,7 +150,7 @@ class TestRTypes(unittest.TestCase):
         s1.set_contents_from_int(314)
         s2.set_contents_from_int(789)
         r()
-        self.assertEqual(t1.get_contents_as_int,192)
+        self.assertEqual(t1.get_contents_as_int(), 192)
 
     def test_slt(self):
         pass
@@ -234,7 +234,15 @@ class TestITypes(unittest.TestCase):
         pass
 
     def test_lb(self):
-        pass
+        Memory.reset()
+        DataStack.alloc(1024)
+        i = IType("lb", "$t0", 10, "$t1")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t1.set_contents_from_int(123)
+        res = Memory.get_byte(123)
+        i()
+        self.assertEqual(t0.get_contents_as_int(), res)
 
     def test_lh(self):
         pass

@@ -241,7 +241,12 @@ class TestITypes(unittest.TestCase):
         pass
 
     def test_slti(self):
-        pass
+        r = IType("slti", "$t1", 1, "$t2")
+        t1 = RegisterPool.get_register("$t1")
+        t2 = RegisterPool.get_register("$t2")
+        t2.set_contents_from_int(2)
+        r()
+        self.assertEqual(t1.get_contents_as_int(), 0)
 
     def test_sltiu(self):
         pass

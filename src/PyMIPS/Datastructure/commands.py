@@ -182,8 +182,8 @@ def addi_command(command):
 
 def mul_command(command):
     def exe():
-        mfhi = RegisterPool.get_register("mfhi")
-        mflo = RegisterPool.get_register("mflo")
+        mfhi = RegisterPool.get_register("hi")
+        mflo = RegisterPool.get_register("lo")
         dest = command.destination_register
         source = command.source_register
         target = command.target_register
@@ -202,8 +202,8 @@ def mul_command(command):
 
 def mult_command(command):
     def exe():
-        mfhi = RegisterPool.get_register("$mfhi")
-        mflo = RegisterPool.get_register("$mflo")
+        mfhi = RegisterPool.get_register("hi")
+        mflo = RegisterPool.get_register("lo")
         dest = command.destination_register
         source = command.source_register
 
@@ -379,7 +379,7 @@ def lw_command(command):
 
 def mflo_command(command):
     def exe():
-        mflo = RegisterPool.get_register("$mflo")
+        mflo = RegisterPool.get_register("lo")
         command.destination_register.set_contents_from_bytes(
             mflo.get_contents_as_bytes()
         )
@@ -389,7 +389,7 @@ def mflo_command(command):
 
 def mfhi_command(command):
     def exe():
-        mfhi = RegisterPool.get_register("$mfhi")
+        mfhi = RegisterPool.get_register("hi")
         command.destination_register.set_contents_from_bytes(
             mfhi.get_contents_as_bytes()
         )
@@ -407,8 +407,8 @@ def div_command(command):
             command.source_register.get_contents_as_int()
             % command.destination_register.get_contents_as_int()
         )
-        mfhi = RegisterPool.get_register("$mfhi")
-        mflo = RegisterPool.get_register("$mflo")
+        mfhi = RegisterPool.get_register("hi")
+        mflo = RegisterPool.get_register("lo")
         mfhi.set_contents_from_int(lambda: remainder_res)
         mflo.set_contents_from_int(lambda: quotient_res)
 

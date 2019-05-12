@@ -53,7 +53,17 @@ class TestRTypes(unittest.TestCase):
         pass
 
     def test_mfhi(self):
-        pass
+        # d = RType("div", "$t2", "$t0")
+        # t2 = RegisterPool.get_register("$t2")
+        # t0 = RegisterPool.get_register("$t0")
+        # t2.set_contents_from_int(10)
+        # t0.set_contents_from_int(5)
+        # d()
+        r = RType("mfhi", "$t1")
+        t1 = RegisterPool.get_register("$t1")
+        r()
+        hi = RegisterPool.get_register("hi")
+        self.assertEqual(t1.get_contents_as_int(), hi.get_contents_as_int())
 
     def test_mthi(self):
         pass

@@ -213,11 +213,12 @@ class TestITypes(unittest.TestCase):
         pass
 
     def test_andi(self):
-        # i = IType("andi", "t0", 1, "$t1")
-        # t0 = RegisterPool.get_register("t0")
-        # t1 = RegisterPool.get_register("$t1")
-        # t1.set_contents_from_bytes(1)
-        pass
+        i = IType("andi", "$t0", 79, "$t1")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t1.set_contents_from_int(67)
+        i()
+        self.assertEqual(t0.get_contents_as_int(), 67)
 
     def test_ori(self):
         i = IType("ori", "$t0", immediate=645, source="$s1")

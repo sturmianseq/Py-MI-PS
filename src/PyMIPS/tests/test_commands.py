@@ -222,7 +222,12 @@ class TestITypes(unittest.TestCase):
         pass
 
     def test_ori(self):
-        pass
+        i = IType("ori", "$t0", immediate=645, source="$s1")
+        t0 = RegisterPool.get_register("$t0")
+        s1 = RegisterPool.get_register("$s1")
+        s1.set_contents_from_int(123)
+        i()
+        self.assertEqual(t0.get_contents_as_int(), 767)
 
     def test_xori(self):
         pass

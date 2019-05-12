@@ -187,12 +187,15 @@ class TestITypes(unittest.TestCase):
         return
 
     def test_bne(self):
+        # TODO: ashton
         pass
 
     def test_blez(self):
+        # TODO: ashton
         pass
 
     def test_bgtz(self):
+        # TODO: ashton
         pass
 
     def test_addi(self):
@@ -229,7 +232,12 @@ class TestITypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), 767)
 
     def test_xori(self):
-        pass
+        i = IType("xori", "$t0", immediate=765, source="$s1")
+        t0 = RegisterPool.get_register("$t0")
+        s1 = RegisterPool.get_register("$s1")
+        s1.set_contents_from_int(345)
+        i()
+        self.assertEqual(t0.get_contents_as_int(), 932)
 
     def test_lui(self):
         pass

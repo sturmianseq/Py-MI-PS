@@ -215,7 +215,6 @@ def validate_2_itype(instruction) -> bool:
     check1 = destination is not None
     check2 = source is not None
     check3 = immediate is not None
-    print(instruction.immediate._value)
     if instruction.command in ("beq", "bne", "sll", "srl", "sra") and isinstance(
         immediate._value, str
     ):

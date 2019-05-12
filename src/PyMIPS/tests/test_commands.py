@@ -49,8 +49,14 @@ class TestRTypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), 30)
 
     def test_srav(self):
-        # TODO: srav
-        return
+        r = RType("srlv", "$t0", "$t1", "$t2")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t2 = RegisterPool.get_register("$t2")
+        t1.set_contents_from_int(3414)
+        t2.set_contents_from_int(4)
+        r()
+        self.assertEqual(t0.get_contents_as_int(), 213)
 
     def test_jr(self):
         pass
@@ -113,10 +119,9 @@ class TestRTypes(unittest.TestCase):
         # t0.set_contents_from_int(651)
         # t1.set_contents_from_int(213)
         # r()
-        # quo = RegisterPool.get_register("mflo")
-        # rem = RegisterPool.get_register("mfhi")
-        # self.assertEqual(quo, 3)
-        # self.assertEqual(rem, 12)
+        # quo = RegisterPool.get_register("lo").get_contents_as_int
+        # rem = RegisterPool.get_register("hi").get_contents_as_int
+        # self.assertEqual(quo, 3) and self.assertEqual(rem, 12)
         pass
 
     def test_divu(self):

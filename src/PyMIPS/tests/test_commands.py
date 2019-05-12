@@ -29,8 +29,14 @@ sll, srl, and sra are treated as I Types
 
 class TestRTypes(unittest.TestCase):
     def test_sllv(self):
-        # TODO: sllv
-        return
+        r = RType("sllv", "$t0", "$t1", "$t2")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t2 = RegisterPool.get_register("$t2")
+        t1.set_contents_from_int(123)
+        t1.set_contents_from_int(2)
+        r()
+        self.assertEqual(t0.get_contents_as_int(), 492)
 
     def test_srlv(self):
         # TODO: srlv

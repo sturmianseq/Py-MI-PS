@@ -206,9 +206,12 @@ class TestITypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), 16)
 
     def test_srl(self):
-        # TODO: srl
-        return
-
+        i = IType("srl", "$t0", 4, "$t1")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t1.set_contents_from_int(123)
+        t()
+        self.assertEqual(t0.get_contents_as_int(), 1968)
     def test_sra(self):
         # TODO: sra
         return
@@ -305,6 +308,12 @@ class TestITypes(unittest.TestCase):
         pass
 
     def test_sb(self):
+        Memory.reset()
+        # DataStack.alloc(1024)
+        # i = IType("sb", "$t0", 10, "$sb")
+        # t0 = RegisterPool.get_register("$t0")
+        # t1 = RegisterPool.get_register("$t1")
+        # i()
         pass
 
     def test_sh(self):

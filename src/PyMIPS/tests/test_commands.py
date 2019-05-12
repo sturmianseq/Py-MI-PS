@@ -69,7 +69,11 @@ class TestRTypes(unittest.TestCase):
         pass
 
     def test_mflo(self):
-        pass
+        r = RType("mflo", "$t1")
+        t1 = RegisterPool.get_register("$t1")
+        r()
+        lo = RegisterPool.get_register("hi")
+        self.assertEqual(t1.get_contents_as_int(), lo.get_contents_as_int())
 
     def test_mtlo(self):
         pass

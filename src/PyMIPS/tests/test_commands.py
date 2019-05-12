@@ -263,7 +263,12 @@ class TestITypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), 20)
 
     def test_addiu(self):
-        pass
+        i = IType("addiu", "$t0", immediate=2147483647, source="$t1")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t1.set_contents_from_int(1)
+        i()
+        self.assertEqual(t0.get_contents_as_int(), -1)
 
     def test_slti(self):
         r = IType("slti", "$t1", 1, "$t2")
@@ -301,6 +306,7 @@ class TestITypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), 932)
 
     def test_lui(self):
+        # TODO
         pass
 
     def test_lb(self):

@@ -34,13 +34,19 @@ class TestRTypes(unittest.TestCase):
         t1 = RegisterPool.get_register("$t1")
         t2 = RegisterPool.get_register("$t2")
         t1.set_contents_from_int(123)
-        t1.set_contents_from_int(2)
+        t2.set_contents_from_int(2)
         r()
         self.assertEqual(t0.get_contents_as_int(), 492)
 
     def test_srlv(self):
-        # TODO: srlv
-        return
+        r = RType("srlv", "$t0", "$t1", "$t2")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t2 = RegisterPool.get_register("$t2")
+        t1.set_contents_from_int(123)
+        t2.set_contents_from_int(2)
+        r()
+        self.assertEqual(t0.get_contents_as_int(), 30)
 
     def test_srav(self):
         # TODO: srav

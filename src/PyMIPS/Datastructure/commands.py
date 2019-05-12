@@ -39,6 +39,48 @@ def get_command(ast_class):
         "beqz": beqz_command,
         "bne": bne_command,
         "bnez": bnez_command,
+        "or": or_command,
+        # Unimplemented r-types
+        "nor": unimplemented,
+        "sll": unimplemented,
+        "slt": unimplemented,
+        "sltu": unimplemented,
+        "sra": unimplemented,
+        "srav": unimplemented,
+        "divu": unimplemented,
+        "jalr": unimplemented,
+        "multu": unimplemented,
+        "mthi": unimplemented,
+        "mtlo": unimplemented,
+        "madd": unimplemented,
+        "maddu": unimplemented,
+        "msub": unimplemented,
+        "msubu": unimplemented,
+        "nop": unimplemented,
+        # Unimplemented i-types
+        "addiu": unimplemented,
+        "andi": andi_command,
+        "bgez": unimplemented,
+        "blez": unimplemented,
+        "lbu": unimplemented,
+        "lh": unimplemented,
+        "lhu": unimplemented,
+        "lui": unimplemented,
+        "ori": ori_command,
+        "sb": unimplemented,
+        "slti": unimplemented,
+        "sltiu": unimplemented,
+        "sh": unimplemented,
+        "xori": xori_command,
+        "ll": unimplemented,
+        "sc": unimplemented,
+        "swl": unimplemented,
+        "tgei": unimplemented,
+        "teqi": unimplemented,
+        "tgeiu": unimplemented,
+        "tlti": unimplemented,
+        "tltiu": unimplemented,
+        "tnei": unimplemented,
     }[ast_class.command](ast_class)
 
 
@@ -73,12 +115,56 @@ def xor_command(command):
     return exe
 
 
+def xori_command(command):
+    def exe():
+        destination = command.destination_register
+        source = command.source_register.get_contents_as_bytes()
+        immediate = command.immediate().to_bytes(5, "big", signed=True)
+        res = [a ^ b for (a, b) in zip(source, immediate[-4:])]
+        destination.set_contents_from_bytes(res)
+
+    return exe
+
+
 def and_command(command):
     def exe():
         destination = command.destination_register
         source = command.source_register.get_contents_as_bytes()
         target = command.target_register.get_contents_as_bytes()
         res = [a & b for (a, b) in zip(source, target)]
+        destination.set_contents_from_bytes(res)
+
+    return exe
+
+
+def andi_command(command):
+    def exe():
+        destination = command.destination_register
+        source = command.source_register.get_contents_as_bytes()
+        immediate = command.immediate().to_bytes(5, "big", signed=True)
+        res = [a & b for (a, b) in zip(source, immediate[-4:])]
+        destination.set_contents_from_bytes(res)
+
+    return exe
+
+
+def or_command(command):
+    def exe():
+        destination = command.destination_register
+        source = command.source_register.get_contents_as_bytes()
+        target = command.target_register.get_contents_as_bytes()
+        res = [a | b for (a, b) in zip(source, target)]
+        destination.set_contents_from_bytes(res)
+
+    return exe
+
+
+def ori_command(command):
+    def exe():
+        destination = command.destination_register
+        source = command.source_register.get_contents_as_bytes()
+        immediate = command.immediate().to_bytes(5, "big", signed=True)
+        res = [a | b for (a, b) in zip(source, immediate[-4:])]
         destination.set_contents_from_bytes(res)
 
     return exe
@@ -294,7 +380,6 @@ def lw_command(command):
 def mflo_command(command):
     def exe():
         mflo = RegisterPool.get_register("$mflo")
-        print(mflo)
         command.destination_register.set_contents_from_bytes(
             mflo.get_contents_as_bytes()
         )
@@ -315,17 +400,17 @@ def mfhi_command(command):
 def div_command(command):
     def exe():
         quotient_res = (
-            command.source_register.get_contents()
-            // command.destination_register.get_contents()
+            command.source_register.get_contents_as_int()
+            // command.destination_register.get_contents_as_int()
         )
         remainder_res = (
-            command.source_register.get_contents()
-            % command.destination_register.get_contents()
+            command.source_register.get_contents_as_int()
+            % command.destination_register.get_contents_as_int()
         )
         mfhi = RegisterPool.get_register("$mfhi")
         mflo = RegisterPool.get_register("$mflo")
-        mfhi.set_contents(lambda: remainder_res)
-        mflo.set_contents(lambda: quotient_res)
+        mfhi.set_contents_from_int(lambda: remainder_res)
+        mflo.set_contents_from_int(lambda: quotient_res)
 
     return exe
 

@@ -85,7 +85,6 @@ commands = [
     r"tlt\s",
     r"tne\s",
     r"xor\s",
-    r"abs\s",
     r"la\s",
     r"jr\s",
     r"lb\s",
@@ -99,6 +98,7 @@ commands = [
     r"sw\s",
     r"j\s",
     r"li\s",
+    r"bge\s",
 ]
 registers = [r"[$][^\s,)]+"]
 

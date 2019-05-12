@@ -213,13 +213,11 @@ class TestJTypes(unittest.TestCase):
 
 class TestITypes(unittest.TestCase):
     def test_sll(self):
-        # TODO: sll
         i = IType("sll", "$t0", 2, "$t1")
         t0 = RegisterPool.get_register("$t0")
         t1 = RegisterPool.get_register("$t1")
         t1.set_contents_from_int(4)
         i()
-        # changed from 16 to 20 to test i-types that I am doing
         self.assertEqual(t0.get_contents_as_int(), 16)
 
     def test_srl(self):
@@ -336,12 +334,15 @@ class TestITypes(unittest.TestCase):
         pass
 
     def test_sb(self):
-        Memory.reset()
+        # Memory.reset()
         # DataStack.alloc(1024)
-        # i = IType("sb", "$t0", 10, "$sb")
+
+        # i = IType("sb", "$t0", 10, "$s1")
         # t0 = RegisterPool.get_register("$t0")
-        # t1 = RegisterPool.get_register("$t1")
+        # s1 = RegisterPool.get_register("$s1")
+        # s1.set_contents_from_int(300)
         # i()
+        # self.assertEqual(DataStack.load_byte(10, "$s1"), 300)
         pass
 
     def test_sh(self):

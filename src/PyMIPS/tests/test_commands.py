@@ -49,7 +49,7 @@ class TestRTypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), 30)
 
     def test_srav(self):
-        r = RType("srlv", "$t0", "$t1", "$t2")
+        r = RType("srav", "$t0", "$t1", "$t2")
         t0 = RegisterPool.get_register("$t0")
         t1 = RegisterPool.get_register("$t1")
         t2 = RegisterPool.get_register("$t2")

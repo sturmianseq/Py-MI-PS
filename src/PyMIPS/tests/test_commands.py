@@ -426,7 +426,9 @@ class TestITypes(unittest.TestCase):
         s1 = RegisterPool.get_register("$s1")
         s1.set_contents_from_int(300)
         i()
-        self.assertEqual(DataStack.get_byte(310), 37271)
+        self.assertEqual(
+            DataStack.get_byte(310), bytes(151)
+        )  # Not sure if signed or unsigned
 
     def test_sh(self):
         # TODO: Ashton

@@ -345,7 +345,12 @@ class TestITypes(unittest.TestCase):
         self.assertEqual(t1.get_contents_as_int(), 0)
 
     def test_sltiu(self):
-        pass
+        r = IType("slti", "$t1", 2147483649, "$t2")
+        t1 = RegisterPool.get_register("$t1")
+        t2 = RegisterPool.get_register("$t2")
+        t2.set_contents_from_int(3147483649)
+        r()
+        self.assertEqual(t1.get_contents_as_int(), 1)
 
     def test_andi(self):
         i = IType("andi", "$t0", 79, "$t1")
@@ -374,10 +379,9 @@ class TestITypes(unittest.TestCase):
     def test_lui(self):
         i = IType("lui", "$t1", 100)
         t1 = RegisterPool.get_register("$t1")
-        a = bytes(100)
-        a[2] = 0
-        a[3] = 0
-        self.assertEqual(a, t1.get_contents_as_bytes())
+        t1.set_contents_as_int(0)
+        i()
+        self.assertEqual(6553600, t1.get_contents_as_int())
 
     def test_lb(self):
         Memory.reset()

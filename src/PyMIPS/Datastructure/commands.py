@@ -42,6 +42,9 @@ def get_command(ast_class):
         "or": or_command,
         # Unimplemented r-types
         "nor": unimplemented,
+        "srl": unimplemented,
+        "srlv": unimplemented,
+        "sllv": unimplemented,
         "sll": unimplemented,
         "slt": unimplemented,
         "sltu": unimplemented,
@@ -211,10 +214,8 @@ def mult_command(command):
         r = result.to_bytes(12, "big", signed=True)
         hi = r[-8:-4]
         low = r[-4:]
-        assert len(hi) == len(low)
         mfhi.set_contents_from_bytes(hi)
         mflo.set_contents_from_bytes(low)
-        print(mflo, mfhi)
 
     return exe
 
@@ -400,17 +401,17 @@ def mfhi_command(command):
 def div_command(command):
     def exe():
         quotient_res = (
-            command.source_register.get_contents_as_int()
-            // command.destination_register.get_contents_as_int()
+            command.destination_register.get_contents_as_int()
+            // command.source_register.get_contents_as_int()
         )
         remainder_res = (
-            command.source_register.get_contents_as_int()
-            % command.destination_register.get_contents_as_int()
+            command.destination_register.get_contents_as_int()
+            % command.source_register.get_contents_as_int()
         )
         mfhi = RegisterPool.get_register("hi")
         mflo = RegisterPool.get_register("lo")
-        mfhi.set_contents_from_int(lambda: remainder_res)
-        mflo.set_contents_from_int(lambda: quotient_res)
+        mfhi.set_contents_from_int(remainder_res)
+        mflo.set_contents_from_int(quotient_res)
 
     return exe
 

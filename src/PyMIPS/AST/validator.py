@@ -31,7 +31,7 @@ def validate(instruction) -> bool:
         "xor": validate_3_rtype,
         "div": validate_2_rtype,
         "divu": validate_2_rtype,
-        "jalr": validate_2_rtype,
+        "jalr": validate_jalr,
         "mul": validate_2_rtype,
         "mult": validate_2_rtype,
         "madd": validate_2_rtype,
@@ -99,6 +99,9 @@ def validate(instruction) -> bool:
     try:
         func = switch[instruction.command]
         res = func(instruction)
+    except KeyError:
+        res = True
+        print(f"Validation for {instruction.command} not implemented")
     except:
         res = False
     return res
@@ -133,6 +136,10 @@ list_of_registers = (
     "$sp",
     "$ra",
 )
+
+
+def validate_jalr(inst):
+    return validate_1_rtype(inst) or validate_2_rtype(inst)
 
 
 def validate_3_rtype(instruction) -> bool:

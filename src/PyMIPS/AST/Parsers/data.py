@@ -32,3 +32,6 @@ def space_directive():
         return DataSpace(data)
 
     return Tag(LABEL) + Keyword(".space", DIRECTIVE) + Tag(INT) ^ exe
+
+# TODO: Add other data directives
+

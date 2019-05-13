@@ -96,7 +96,7 @@ class TestIType(unittest.TestCase):
         with self.assertRaises(Exception):
             IType("lw", "$t0", immediate=None)
         with self.assertRaises(Exception):
-            IType("add", "$t32")
+            IType("add", "$t32", 10)
         with self.assertRaises(Exception):
             IType("lw", "t32", immediate=None)
         with self.assertRaises(Exception):
@@ -106,9 +106,7 @@ class TestIType(unittest.TestCase):
 
     def test_bad_1(self):
         with self.assertRaises(Exception):
-            IType("li", "$t3", source="$t2")
-        with self.assertRaises(Exception):
-            IType("li", source="$t2")
+            IType("li", "$t3", 10, source="$t2")
         with self.assertRaises(Exception):
             IType("lui", "100", 100)
         with self.assertRaises(Exception):
@@ -129,7 +127,3 @@ class TestJType(unittest.TestCase):
     def test_bad(self):
         with self.assertRaises(Exception):
             JType("add", "funct1")
-        with self.assertRaises(Exception):
-            JType("j")
-        with self.assertRaises(Exception):
-            JType("jal")

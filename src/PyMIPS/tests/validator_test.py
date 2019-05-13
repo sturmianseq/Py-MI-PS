@@ -43,8 +43,6 @@ class TestRType(unittest.TestCase):
             RType("move", "$3", "t435", "$vew")
         with self.assertRaises(Exception):
             RType("lw", "$t3", "$s4", "gfd4")
-        with self.assertRaises(Exception):
-            RType(6, "$t3")
 
     def test_bad_2(self):
         with self.assertRaises(Exception):
@@ -53,14 +51,12 @@ class TestRType(unittest.TestCase):
             RType("div", "$t3")
         with self.assertRaises(Exception):
             RType("mul", "$", "3")
-        with self.assertRaises(Exception):
-            RType("jalr", "$t3")
 
     def test_bad_1(self):
         with self.assertRaises(Exception):
             RType("mfhi", "$t3", "$t4")
         with self.assertRaises(Exception):
-            RType("mflo")
+            RType("mflo", None)
         with self.assertRaises(Exception):
             RType("mflo", "tr")
 
@@ -111,8 +107,6 @@ class TestIType(unittest.TestCase):
             IType("lui", "100", 100)
         with self.assertRaises(Exception):
             IType("la", "$t3f", 34)
-        with self.assertRaises(Exception):
-            IType("tgi", "$t3f", 34)
 
 
 class TestJType(unittest.TestCase):

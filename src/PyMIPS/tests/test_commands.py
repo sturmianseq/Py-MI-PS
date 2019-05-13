@@ -661,8 +661,9 @@ class TestITypes(unittest.TestCase):
         )  # Not sure if signed or unsigned
 
     def test_sh(self):
-        # TODO: Ashton
-        pass
+        Memory.reset()
+        DataStack.alloc(1024)
+        i = IType("sh", "$t1", 0, ("$sp"))
 
     def test_sw_stack(self):
         Memory.reset()

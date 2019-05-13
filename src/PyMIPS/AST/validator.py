@@ -132,8 +132,6 @@ list_of_registers = (
     "$t9",
     "$sp",
     "$ra",
-    "hi",
-    "lo",
 )
 
 
@@ -266,16 +264,14 @@ def validate_2_itype(instruction) -> bool:
     if instruction.command in ("beq", "bne", "sll", "srl", "sra") and isinstance(
         immediate._value, str
     ):
-
         if destination.name in list_of_registers and source.name in list_of_registers:
             return check1 and check2 and check3
-    else:
-        if (
-            destination.name in list_of_registers
-            and isinstance(immediate(), int)
-            and source.name in list_of_registers
-        ):
-            return check1 and check2 and check3
+    elif (
+        destination.name in list_of_registers
+        and isinstance(immediate(), int)
+        and source.name in list_of_registers
+    ):
+        return check1 and check2 and check3
     return False
 
 

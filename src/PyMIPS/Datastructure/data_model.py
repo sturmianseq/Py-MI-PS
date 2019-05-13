@@ -50,6 +50,9 @@ class Register:
     def get_contents_as_int(self):
         return int.from_bytes(self.__contents, "big", signed=True)
 
+    def get_contents_as_unsigned_int(self):
+        return int.from_bytes(self.__contents, "big", signed=False)
+
     def get_contents_as_bytes(self):
         return self.__contents
 
@@ -230,7 +233,7 @@ class ProgramStack:
     __labels = {}
     __instructions = {}
     __next_address = 0
-    __pc = create_register("$pc")
+    __pc = create_register("pc")
 
     @staticmethod
     def reset():
@@ -291,3 +294,9 @@ class ProgramStack:
         for l in block.contents:
             ProgramStack.add_label(l)
 
+    @staticmethod
+    def add_block_from_dict(block: dict):
+        for key in block:
+            ProgramStack.__labels[key] = ProgramStack.__next_address
+            for inst in block[key]:
+                ProgramStack.add_instruction(inst)

@@ -409,20 +409,24 @@ class TestITypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), 1203)
 
     def test_lbu(self):
-        pass
+        Memory.reset()
+        DataStack.alloc(1024)
+        i = IType("lbu", "$t0", -100, "$sp")
+        t0 = RegisterPool.get_register("$t0")
+        t0.set_contents_as_int(0)
+        i()
+        self.assertEqual(t0.get_contents_as_int(), 156)
 
     def test_sb(self):
-        # Memory.reset()
-        # DataStack.alloc(1024)
-
-        # i = IType("sb", "$t0", 10, "$s1")
-        # t0 = RegisterPool.get_register("$t0")
+        Memory.reset()
+        DataStack.alloc(1024)
+        i = IType("sb", "$t0", 10, "$s1")
+        t0 = RegisterPool.get_register("$t0")
         t0.set_contents_from_int(37271)
-        # s1 = RegisterPool.get_register("$s1")
-        # s1.set_contents_from_int(300)
-        # i()
-        # self.assertEqual(DataStack.get_byte(310), 37271)
-        pass
+        s1 = RegisterPool.get_register("$s1")
+        s1.set_contents_from_int(300)
+        i()
+        self.assertEqual(DataStack.get_byte(310), 37271)
 
     def test_sh(self):
         # TODO: Ashton

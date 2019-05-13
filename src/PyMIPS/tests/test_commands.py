@@ -43,20 +43,20 @@ class TestRTypes(unittest.TestCase):
         t0 = RegisterPool.get_register("$t0")
         t1 = RegisterPool.get_register("$t1")
         t2 = RegisterPool.get_register("$t2")
-        t1.set_contents_from_int(123)
+        t1.set_contents_from_int(-16)
         t2.set_contents_from_int(2)
         r()
-        self.assertEqual(t0.get_contents_as_int(), 30)
+        self.assertEqual(t0.get_contents_as_int(), -4)
 
     def test_srav(self):
         r = RType("srav", "$t0", "$t1", "$t2")
         t0 = RegisterPool.get_register("$t0")
         t1 = RegisterPool.get_register("$t1")
         t2 = RegisterPool.get_register("$t2")
-        t1.set_contents_from_int(3414)
-        t2.set_contents_from_int(4)
+        t1.set_contents_from_int(-16)
+        t2.set_contents_from_int(2)
         r()
-        self.assertEqual(t0.get_contents_as_int(), 213)
+        self.assertEqual(t0.get_contents_as_int(), 1073741820)
 
     def test_jr(self):
         pass
@@ -71,17 +71,12 @@ class TestRTypes(unittest.TestCase):
         pass
 
     def test_mfhi(self):
-        # d = RType("div", "$t2", "$t0")
-        # t2 = RegisterPool.get_register("$t2")
-        # t0 = RegisterPool.get_register("$t0")
-        # t2.set_contents_from_int(10)
-        # t0.set_contents_from_int(5)
-        # d()
         r = RType("mfhi", "$t1")
         t1 = RegisterPool.get_register("$t1")
-        r()
         hi = RegisterPool.get_register("hi")
-        self.assertEqual(t1.get_contents_as_int(), hi.get_contents_as_int())
+        hi.set_contents_from_int(280)
+        r()
+        self.assertEqual(t1.get_contents_as_int(), 280)
 
     def test_mthi(self):
         r = RType("mthi", "$t1")
@@ -94,9 +89,10 @@ class TestRTypes(unittest.TestCase):
     def test_mflo(self):
         r = RType("mflo", "$t1")
         t1 = RegisterPool.get_register("$t1")
-        r()
         lo = RegisterPool.get_register("lo")
-        self.assertEqual(t1.get_contents_as_int(), lo.get_contents_as_int())
+        lo.set_contents_from_int(423)
+        r()
+        self.assertEqual(t1.get_contents_as_int(), 423)
 
     def test_mtlo(self):
         r = RType("mtlo", "$t1")
@@ -106,26 +102,77 @@ class TestRTypes(unittest.TestCase):
         lo = RegisterPool.get_register("lo")
         self.assertEqual(lo.get_contents_as_int(), 564)
 
-    def test_mult(self):
-        pass
+    def test_mult_both_pos(self):
+        r = RType("mult", "$t0", "$t1")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t0.set_contents_from_int(651)
+        t1.set_contents_from_int(321)
+        r()
+        hi = RegisterPool.get_register("hi").get_contents_as_int()
+        lo = RegisterPool.get_register("lo").get_contents_as_int()
+        self.assertEqual(hi, 0)
+        self.assertEqual(lo, 208971)
+
+    def test_mult_one_neg(self):
+        r = RType("mult", "$t0", "$t1")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t0.set_contents_from_int(651)
+        t1.set_contents_from_int(-321)
+        r()
+        hi = RegisterPool.get_register("hi").get_contents_as_int()
+        lo = RegisterPool.get_register("lo").get_contents_as_int()
+        self.assertEqual(hi, -1)
+        self.assertEqual(lo, -208971)
+
+    def test_mult_both_neg(self):
+        r = RType("mult", "$t0", "$t1")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t0.set_contents_from_int(-651)
+        t1.set_contents_from_int(-321)
+        r()
+        hi = RegisterPool.get_register("hi").get_contents_as_int()
+        lo = RegisterPool.get_register("lo").get_contents_as_int()
+        self.assertEqual(hi, 0)
+        self.assertEqual(lo, 208971)
 
     def test_multu(self):
-        pass
+        r = RType("multu", "$t0", "$t1")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t0.set_contents_from_int(-651)
+        t1.set_contents_from_int(321)
+        r()
+        hi = RegisterPool.get_register("hi").get_contents_as_int()
+        lo = RegisterPool.get_register("lo").get_contents_as_int()
+        self.assertEqual(hi, 320)
+        self.assertEqual(lo, 208971)
 
     def test_div(self):
-        # r = RType("div", "$t0", "$t1")
-        # t0 = RegisterPool.get_register("$t0")
-        # t1 = RegisterPool.get_register("$t1")
-        # t0.set_contents_from_int(651)
-        # t1.set_contents_from_int(213)
-        # r()
-        # quo = RegisterPool.get_register("lo").get_contents_as_int
-        # rem = RegisterPool.get_register("hi").get_contents_as_int
-        # self.assertEqual(quo, 3) and self.assertEqual(rem, 12)
-        pass
+        r = RType("div", "$t0", "$t1")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t0.set_contents_from_int(651)
+        t1.set_contents_from_int(213)
+        r()
+        quo = RegisterPool.get_register("lo").get_contents_as_int()
+        rem = RegisterPool.get_register("hi").get_contents_as_int()
+        self.assertEqual(quo, 3)
+        self.assertEqual(rem, 12)
 
     def test_divu(self):
-        pass
+        r = RType("divu", "$t0", "$t1")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t0.set_contents_from_int(543)
+        t1.set_contents_from_int(432)
+        r()
+        quo = RegisterPool.get_register("lo").get_contents_as_int()
+        rem = RegisterPool.get_register("hi").get_contents_as_int()
+        self.assertEqual(quo, 1)
+        self.assertEqual(rem, 111)
 
     def test_add(self):
         r = RType("add", "$t0", "$t1", "$t3")
@@ -138,7 +185,14 @@ class TestRTypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), 10)
 
     def test_addu(self):
-        pass
+        r = RType("addu", "$t0", "$t1", "$t3")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t3 = RegisterPool.get_register("$t3")
+        t1.set_contents_from_int(2147483647)
+        t3.set_contents_from_int(1)
+        r()
+        self.assertEqual(t0.get_contents_as_int(), 2147483648)
 
     def test_sub(self):
         r = RType("sub", "$t0", "$t1", "$t3")
@@ -151,7 +205,14 @@ class TestRTypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), 346)
 
     def test_subu(self):
-        pass
+        r = RType("subu", "$t0", "$t1", "$t3")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t3 = RegisterPool.get_register("$t3")
+        t1.set_contents_from_int(-2147483648)
+        t3.set_contents_from_int(1)
+        r()
+        self.assertEqual(t0.get_contents_as_int(), -2147483649)
 
     def test_and(self):
         r = RType("and", "$t0", "$s0", "$s1")
@@ -204,7 +265,14 @@ class TestRTypes(unittest.TestCase):
         self.assertEqual(t1.get_contents_as_int(), 1)
 
     def test_sltu(self):
-        pass
+        r = RType("slt", "$t1", "$t2", "$t3")
+        t1 = RegisterPool.get_register("$t1")
+        t2 = RegisterPool.get_register("$t2")
+        t3 = RegisterPool.get_register("$t3")
+        t2.set_contents_from_int(-2147483649)
+        t3.set_contents_from_int(2147483651)
+        r()
+        self.assertEqual(t1.get_contents_as_int(), 1)
 
 
 class TestJTypes(unittest.TestCase):
@@ -304,8 +372,12 @@ class TestITypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), 932)
 
     def test_lui(self):
-        # TODO
-        pass
+        i = IType("lui", "$t1", 100)
+        t1 = RegisterPool.get_register("$t1")
+        a = bytes(100)
+        a[2] = 0
+        a[3] = 0
+        self.assertEqual(a, t1.get_contents_as_bytes())
 
     def test_lb(self):
         Memory.reset()
@@ -319,9 +391,11 @@ class TestITypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), res)
 
     def test_lh(self):
+        # TODO: Ashton
         pass
 
     def test_lw(self):
+        # TODO: Not sure if this is correct
         Memory.reset()
         DataStack.alloc(1024)
         DataStack.store_word(4, 1203)
@@ -339,13 +413,15 @@ class TestITypes(unittest.TestCase):
 
         # i = IType("sb", "$t0", 10, "$s1")
         # t0 = RegisterPool.get_register("$t0")
+        t0.set_contents_from_int(37271)
         # s1 = RegisterPool.get_register("$s1")
         # s1.set_contents_from_int(300)
         # i()
-        # self.assertEqual(DataStack.load_byte(10, "$s1"), 300)
+        # self.assertEqual(DataStack.get_byte(310), 37271)
         pass
 
     def test_sh(self):
+        # TODO: Ashton
         pass
 
     def test_sw_stack(self):

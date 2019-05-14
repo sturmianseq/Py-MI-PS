@@ -90,6 +90,18 @@ def get_command(ast_class):
         return unimplemented(ast_class)
 
 
+def sll_command(command):
+    def exe():
+        amount = command.immediate()
+        source = command.source_register.get_contents_as_unsigned_int()
+        dest = command.destination_register
+
+        res = source << amount
+        dest.set_contents_from_int(res)
+
+    return exe
+
+
 def slti_command(command):
     def exe():
         imm = command.immediate()

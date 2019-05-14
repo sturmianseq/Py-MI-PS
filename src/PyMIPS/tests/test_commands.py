@@ -359,11 +359,11 @@ class TestITypes(unittest.TestCase):
 
     def test_sra(self):
         i = IType("sra", "$t1", 4, "$s0")
-        t0 = RegisterPool.get_register("$t0")
-        t1 = RegisterPool.get_register("$s0")
-        t1.set_contents_from_int(123)
+        t1 = RegisterPool.get_register("$t1")
+        s0 = RegisterPool.get_register("$s0")
+        s0.set_contents_from_int(123)
         i()
-        self.assertEqual(t0.get_contents_as_int(), 7)
+        self.assertEqual(t1.get_contents_as_int(), 7)
 
     def test_beq_true(self):
         Memory.reset()

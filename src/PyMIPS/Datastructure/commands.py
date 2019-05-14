@@ -46,7 +46,7 @@ def get_command(ast_class):
             "srl": srl_command,
             "srlv": unimplemented,
             "sllv": unimplemented,
-            "sll": unimplemented,
+            "sll": sll_command,
             "slt": unimplemented,
             "sltu": unimplemented,
             "sra": sra_command,
@@ -72,7 +72,7 @@ def get_command(ast_class):
             "lui": unimplemented,
             "ori": ori_command,
             "sb": unimplemented,
-            "slti": unimplemented,
+            "slti": slti_command,
             "sltiu": sltiu_command,
             "sh": unimplemented,
             "xori": xori_command,
@@ -90,10 +90,22 @@ def get_command(ast_class):
         return unimplemented(ast_class)
 
 
+def slti_command(command):
+    def exe():
+        imm = command.immediate()
+        comp = command.source_register.get_contents_as_int()
+        dest = command.destination_register
+        if comp < imm:
+            dest.set_contents_from_int(1)
+        else:
+            dest.set_contents_from_int(0)
+
+    return exe
+
+
 def sltiu_command(command):
     def exe():
         imm = command.immediate()
-        imm = -100
         b = imm.to_bytes(2, "big", signed=True)
         try:
             b = imm.to_bytes(2, "big", signed=True)

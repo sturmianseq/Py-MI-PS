@@ -355,7 +355,7 @@ class TestITypes(unittest.TestCase):
         t1 = RegisterPool.get_register("$t1")
         t1.set_contents_from_int(123)
         i()
-        self.assertEqual(t0.get_contents_as_int(), 1968)
+        self.assertEqual(t0.get_contents_as_int(), 7)
 
     def test_sra(self):
         i = IType("sra", "$t1", 4, "$s0")

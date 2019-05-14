@@ -89,7 +89,7 @@ class TestRTypes(unittest.TestCase):
         self.assertEqual(t1.get_contents_as_int(), current)
 
     def test_syscall(self):
-        # TODO: Figure this out
+        # TODO: Figure this out. Ommitting for now
         pass
 
     def test_move(self):
@@ -625,8 +625,12 @@ class TestITypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), res)
 
     def test_lh(self):
-        # TODO: Ashton
-        pass
+        Memory.reset()
+        DataStack.store_word(4, 0x7744)
+        i = IType("lh", "$t0", 4, "$sp")
+        i()
+        t0 = RegisterPool.get_register("$t0")
+        self.assertEqual(t0.get_contents_as_int(), 0x44)
 
     def test_lw(self):
         # TODO: Not sure if this is correct
@@ -656,14 +660,17 @@ class TestITypes(unittest.TestCase):
         s1 = RegisterPool.get_register("$s1")
         s1.set_contents_from_int(300)
         i()
-        self.assertEqual(
-            Memory.get_byte(310), 151
-        )  # Not sure if signed or unsigned
+        self.assertEqual(Memory.get_byte(310), 151)  # Not sure if signed or unsigned
 
     def test_sh(self):
         Memory.reset()
         DataStack.alloc(1024)
         i = IType("sh", "$t1", 0, ("$sp"))
+        t1 = RegisterPool.get_register("$t1")
+        t1.set_contents_from_int(0x4477)
+        i()
+        res = DataStack.load_word(0, "$sp")
+        self.assertEqual(res, 0x77)
 
     def test_sw_stack(self):
         Memory.reset()

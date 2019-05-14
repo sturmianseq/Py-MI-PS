@@ -295,7 +295,7 @@ class TestRTypes(unittest.TestCase):
         self.assertEqual(t1.get_contents_as_int(), 1)
 
     def test_sltu(self):
-        r = RType("slt", "$t1", "$t2", "$t3")
+        r = RType("sltu", "$t1", "$t2", "$t3")
         t1 = RegisterPool.get_register("$t1")
         t2 = RegisterPool.get_register("$t2")
         t3 = RegisterPool.get_register("$t3")

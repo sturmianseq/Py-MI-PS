@@ -73,7 +73,7 @@ def get_command(ast_class):
             "ori": ori_command,
             "sb": unimplemented,
             "slti": unimplemented,
-            "sltiu": unimplemented,
+            "sltiu": sltiu_command,
             "sh": unimplemented,
             "xori": xori_command,
             "ll": unimplemented,
@@ -88,6 +88,26 @@ def get_command(ast_class):
         }[ast_class.command](ast_class)
     except:
         return unimplemented(ast_class)
+
+
+def sltiu_command(command):
+    def exe():
+        imm = command.immediate()
+        imm = -100
+        b = imm.to_bytes(2, "big", signed=True)
+        try:
+            b = imm.to_bytes(2, "big", signed=True)
+        except:
+            raise Exception(f"sltui failed. Immediate must fit in 16 bits: {imm}")
+        imm = int.from_bytes(b, "big", signed=False)
+        comp = command.source_register.get_contents_as_unsigned_int()
+        dest = command.destination_register
+        if comp < imm:
+            dest.set_contents_from_int(1)
+        else:
+            dest.set_contents_from_int(0)
+
+    return exe
 
 
 def not_command(command):

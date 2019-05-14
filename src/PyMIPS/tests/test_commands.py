@@ -578,7 +578,7 @@ class TestITypes(unittest.TestCase):
         r = IType("sltiu", "$t1", -100, "$t2")
         t1 = RegisterPool.get_register("$t1")
         t2 = RegisterPool.get_register("$t2")
-        t2.set_contents_from_int(3147483649)
+        t2.set_contents_from_int(444)
         r()
         self.assertEqual(t1.get_contents_as_int(), 1)
 

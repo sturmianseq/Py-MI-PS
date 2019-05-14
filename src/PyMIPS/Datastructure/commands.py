@@ -49,7 +49,7 @@ def get_command(ast_class):
             "sll": unimplemented,
             "slt": unimplemented,
             "sltu": unimplemented,
-            "sra": unimplemented,
+            "sra": sra_command,
             "srav": unimplemented,
             "divu": unimplemented,
             "jalr": unimplemented,
@@ -100,13 +100,27 @@ def not_command(command):
     return exe
 
 
-def srl_command(command):
+def sra_command(command):
     def exe():
         amount = command.immediate()
         source = command.source_register.get_contents_as_unsigned_int()
         dest = command.destination_register
 
         res = source >> amount
+        dest.set_contents_from_int(res)
+
+    return exe
+
+
+def srl_command(command):
+    from PyMIPS.Datastructure.math_utils import logical_rshift
+
+    def exe():
+        amount = command.immediate()
+        source = command.source_register.get_contents_as_unsigned_int()
+        dest = command.destination_register
+
+        res = logical_rshift(source, amount)
         dest.set_contents_from_int(res)
 
     return exe

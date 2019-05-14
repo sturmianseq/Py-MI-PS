@@ -10,78 +10,84 @@ from PyMIPS.Datastructure.memory import Memory
 
 
 def get_command(ast_class):
-    return {
-        "li": li_command,
-        "lw": lw_command,
-        "sw": sw_command,
-        "add": add_command,
-        "sub": sub_command,
-        "syscall": syscall_command,
-        "mflo": mflo_command,
-        "mfhi": mfhi_command,
-        "div": div_command,
-        "move": move_command,
-        "addi": addi_command,
-        "la": la_command,
-        "beq": beq_command,
-        "j": j_command,
-        "jal": jal_command,
-        "mul": mul_command,
-        "jr": jr_command,
-        "lb": lb_command,
-        "addu": addu_command,
-        "xor": xor_command,
-        "and": and_command,
-        "bltz": bltz_command,
-        "subu": subu_command,
-        "not": not_command,
-        "mult": mult_command,
-        "beqz": beqz_command,
-        "bne": bne_command,
-        "bnez": bnez_command,
-        "or": or_command,
-        # Unimplemented r-types
-        "nor": unimplemented,
-        "sll": unimplemented,
-        "slt": unimplemented,
-        "sltu": unimplemented,
-        "sra": unimplemented,
-        "srav": unimplemented,
-        "divu": unimplemented,
-        "jalr": unimplemented,
-        "multu": unimplemented,
-        "mthi": unimplemented,
-        "mtlo": unimplemented,
-        "madd": unimplemented,
-        "maddu": unimplemented,
-        "msub": unimplemented,
-        "msubu": unimplemented,
-        "nop": unimplemented,
-        # Unimplemented i-types
-        "addiu": unimplemented,
-        "andi": andi_command,
-        "bgez": unimplemented,
-        "blez": unimplemented,
-        "lbu": unimplemented,
-        "lh": unimplemented,
-        "lhu": unimplemented,
-        "lui": unimplemented,
-        "ori": ori_command,
-        "sb": unimplemented,
-        "slti": unimplemented,
-        "sltiu": unimplemented,
-        "sh": unimplemented,
-        "xori": xori_command,
-        "ll": unimplemented,
-        "sc": unimplemented,
-        "swl": unimplemented,
-        "tgei": unimplemented,
-        "teqi": unimplemented,
-        "tgeiu": unimplemented,
-        "tlti": unimplemented,
-        "tltiu": unimplemented,
-        "tnei": unimplemented,
-    }[ast_class.command](ast_class)
+    try:
+        return {
+            "li": li_command,
+            "lw": lw_command,
+            "sw": sw_command,
+            "add": add_command,
+            "sub": sub_command,
+            "syscall": syscall_command,
+            "mflo": mflo_command,
+            "mfhi": mfhi_command,
+            "div": div_command,
+            "move": move_command,
+            "addi": addi_command,
+            "la": la_command,
+            "beq": beq_command,
+            "j": j_command,
+            "jal": jal_command,
+            "mul": mul_command,
+            "jr": jr_command,
+            "lb": lb_command,
+            "addu": addu_command,
+            "xor": xor_command,
+            "and": and_command,
+            "bltz": bltz_command,
+            "subu": subu_command,
+            "not": not_command,
+            "mult": mult_command,
+            "beqz": beqz_command,
+            "bne": bne_command,
+            "bnez": bnez_command,
+            "or": or_command,
+            # Unimplemented r-types
+            "nor": unimplemented,
+            "srl": unimplemented,
+            "srlv": unimplemented,
+            "sllv": unimplemented,
+            "sll": unimplemented,
+            "slt": unimplemented,
+            "sltu": unimplemented,
+            "sra": unimplemented,
+            "srav": unimplemented,
+            "divu": unimplemented,
+            "jalr": unimplemented,
+            "multu": unimplemented,
+            "mthi": unimplemented,
+            "mtlo": unimplemented,
+            "madd": unimplemented,
+            "maddu": unimplemented,
+            "msub": unimplemented,
+            "msubu": unimplemented,
+            "nop": unimplemented,
+            # Unimplemented i-types
+            "addiu": unimplemented,
+            "andi": andi_command,
+            "bgez": unimplemented,
+            "blez": unimplemented,
+            "lbu": unimplemented,
+            "lh": unimplemented,
+            "lhu": unimplemented,
+            "lui": unimplemented,
+            "ori": ori_command,
+            "sb": unimplemented,
+            "slti": unimplemented,
+            "sltiu": unimplemented,
+            "sh": unimplemented,
+            "xori": xori_command,
+            "ll": unimplemented,
+            "sc": unimplemented,
+            "swl": unimplemented,
+            "tgei": unimplemented,
+            "teqi": unimplemented,
+            "tgeiu": unimplemented,
+            "tlti": unimplemented,
+            "tltiu": unimplemented,
+            "tnei": unimplemented,
+        }[ast_class.command](ast_class)
+    except:
+        return unimplemented(ast_class)
 
 
 def not_command(command):
@@ -182,8 +188,8 @@ def addi_command(command):
 
 def mul_command(command):
     def exe():
-        mfhi = RegisterPool.get_register("mfhi")
-        mflo = RegisterPool.get_register("mflo")
+        mfhi = RegisterPool.get_register("hi")
+        mflo = RegisterPool.get_register("lo")
         dest = command.destination_register
         source = command.source_register
         target = command.target_register
@@ -202,8 +208,8 @@ def mul_command(command):
 
 def mult_command(command):
     def exe():
-        mfhi = RegisterPool.get_register("$mfhi")
-        mflo = RegisterPool.get_register("$mflo")
+        mfhi = RegisterPool.get_register("hi")
+        mflo = RegisterPool.get_register("lo")
         dest = command.destination_register
         source = command.source_register
 
@@ -211,10 +217,8 @@ def mult_command(command):
         r = result.to_bytes(12, "big", signed=True)
         hi = r[-8:-4]
         low = r[-4:]
-        assert len(hi) == len(low)
         mfhi.set_contents_from_bytes(hi)
         mflo.set_contents_from_bytes(low)
-        print(mflo, mfhi)
 
     return exe
 
@@ -230,7 +234,7 @@ def j_command(command):
 def jr_command(command):
     def exe():
         dest = command.destination_register.get_contents_as_int()
-        pc = RegisterPool.get_register("$pc")
+        pc = RegisterPool.get_register("pc")
         pc.set_contents_from_int(dest - 4)
 
     return exe
@@ -238,7 +242,7 @@ def jr_command(command):
 
 def jal_command(command):
     def exe():
-        pc = RegisterPool.get_register("$pc").get_contents_as_int()
+        pc = RegisterPool.get_register("pc").get_contents_as_int()
         ra = RegisterPool.get_register("$ra")
         ra.set_contents_from_int(pc + 4)
         ProgramStack.jump_label(command.address)
@@ -255,6 +259,7 @@ def addu_command(command):
         s = int.from_bytes(source, "big", signed=False)
         t = int.from_bytes(target, "big", signed=False)
         res = s + t
+        print(res)
         dest.set_contents_from_int(res)
 
     return exe
@@ -339,7 +344,7 @@ def la_command(command):
 
 def unimplemented(command):
     def exe():
-        print(f"UNIMPLEMENTED {command}")
+        print(f"{command.command} is unimplemented. Skipping...")
 
     return exe
 
@@ -379,7 +384,7 @@ def lw_command(command):
 
 def mflo_command(command):
     def exe():
-        mflo = RegisterPool.get_register("$mflo")
+        mflo = RegisterPool.get_register("lo")
         command.destination_register.set_contents_from_bytes(
             mflo.get_contents_as_bytes()
         )
@@ -389,7 +394,7 @@ def mflo_command(command):
 
 def mfhi_command(command):
     def exe():
-        mfhi = RegisterPool.get_register("$mfhi")
+        mfhi = RegisterPool.get_register("hi")
         command.destination_register.set_contents_from_bytes(
             mfhi.get_contents_as_bytes()
         )
@@ -400,17 +405,17 @@ def mfhi_command(command):
 def div_command(command):
     def exe():
         quotient_res = (
-            command.source_register.get_contents_as_int()
-            // command.destination_register.get_contents_as_int()
+            command.destination_register.get_contents_as_int()
+            // command.source_register.get_contents_as_int()
         )
         remainder_res = (
-            command.source_register.get_contents_as_int()
-            % command.destination_register.get_contents_as_int()
+            command.destination_register.get_contents_as_int()
+            % command.source_register.get_contents_as_int()
         )
-        mfhi = RegisterPool.get_register("$mfhi")
-        mflo = RegisterPool.get_register("$mflo")
-        mfhi.set_contents_from_int(lambda: remainder_res)
-        mflo.set_contents_from_int(lambda: quotient_res)
+        mfhi = RegisterPool.get_register("hi")
+        mflo = RegisterPool.get_register("lo")
+        mfhi.set_contents_from_int(remainder_res)
+        mflo.set_contents_from_int(quotient_res)
 
     return exe
 

@@ -43,8 +43,6 @@ class TestRType(unittest.TestCase):
             RType("move", "$3", "t435", "$vew")
         with self.assertRaises(Exception):
             RType("lw", "$t3", "$s4", "gfd4")
-        with self.assertRaises(Exception):
-            RType(6, "$t3")
 
     def test_bad_2(self):
         with self.assertRaises(Exception):
@@ -53,14 +51,12 @@ class TestRType(unittest.TestCase):
             RType("div", "$t3")
         with self.assertRaises(Exception):
             RType("mul", "$", "3")
-        with self.assertRaises(Exception):
-            RType("jalr", "$t3")
 
     def test_bad_1(self):
         with self.assertRaises(Exception):
             RType("mfhi", "$t3", "$t4")
         with self.assertRaises(Exception):
-            RType("mflo")
+            RType("mflo", None)
         with self.assertRaises(Exception):
             RType("mflo", "tr")
 
@@ -96,7 +92,7 @@ class TestIType(unittest.TestCase):
         with self.assertRaises(Exception):
             IType("lw", "$t0", immediate=None)
         with self.assertRaises(Exception):
-            IType("add", "$t32")
+            IType("add", "$t32", 10)
         with self.assertRaises(Exception):
             IType("lw", "t32", immediate=None)
         with self.assertRaises(Exception):
@@ -106,15 +102,11 @@ class TestIType(unittest.TestCase):
 
     def test_bad_1(self):
         with self.assertRaises(Exception):
-            IType("li", "$t3", source="$t2")
-        with self.assertRaises(Exception):
-            IType("li", source="$t2")
+            IType("li", "$t3", 10, source="$t2")
         with self.assertRaises(Exception):
             IType("lui", "100", 100)
         with self.assertRaises(Exception):
             IType("la", "$t3f", 34)
-        with self.assertRaises(Exception):
-            IType("tgi", "$t3f", 34)
 
 
 class TestJType(unittest.TestCase):
@@ -129,7 +121,3 @@ class TestJType(unittest.TestCase):
     def test_bad(self):
         with self.assertRaises(Exception):
             JType("add", "funct1")
-        with self.assertRaises(Exception):
-            JType("j")
-        with self.assertRaises(Exception):
-            JType("jal")

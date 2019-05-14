@@ -31,7 +31,7 @@ def validate(instruction) -> bool:
         "xor": validate_3_rtype,
         "div": validate_2_rtype,
         "divu": validate_2_rtype,
-        "jalr": validate_2_rtype,
+        "jalr": validate_jalr,
         "mul": validate_2_rtype,
         "mult": validate_2_rtype,
         "madd": validate_2_rtype,
@@ -99,6 +99,9 @@ def validate(instruction) -> bool:
     try:
         func = switch[instruction.command]
         res = func(instruction)
+    except KeyError:
+        res = True
+        print(f"Validation for {instruction.command} not implemented")
     except:
         res = False
     return res
@@ -132,9 +135,11 @@ list_of_registers = (
     "$t9",
     "$sp",
     "$ra",
-    "hi",
-    "lo",
 )
+
+
+def validate_jalr(inst):
+    return validate_1_rtype(inst) or validate_2_rtype(inst)
 
 
 def validate_3_rtype(instruction) -> bool:
@@ -142,8 +147,8 @@ def validate_3_rtype(instruction) -> bool:
     
     Parameters
     ----------
-    instruction : [R-Type]
-        [description]
+    instruction : R-Type
+        R-types with 3 registers
     
     Returns
     -------
@@ -168,6 +173,18 @@ def validate_3_rtype(instruction) -> bool:
 
 
 def validate_2_rtype(instruction) -> bool:
+    """Validates R-Type instructions with 2 registers 
+    
+    Parameters
+    ----------
+    instruction : R-Type
+        R-types with 2 registers
+    
+    Returns
+    -------
+    bool
+        [Syntax correct or not]
+    """
     rd = instruction.destination_register
     rs = instruction.source_register
     rt = instruction.target_register
@@ -182,6 +199,18 @@ def validate_2_rtype(instruction) -> bool:
 
 
 def validate_1_rtype(instruction) -> bool:
+    """Validates R-Type instructions with 1 registers 
+    
+    Parameters
+    ----------
+    instruction : R-Type
+        R-types with 1 registers
+    
+    Returns
+    -------
+    bool
+        [Syntax correct or not]
+    """
     rd = instruction.destination_register
     rs = instruction.source_register
     rt = instruction.target_register
@@ -196,6 +225,18 @@ def validate_1_rtype(instruction) -> bool:
 
 
 def validate_0_rtype(instruction) -> bool:
+    """Validates R-Type instructions with 0 registers 
+    
+    Parameters
+    ----------
+    instruction : R-Type
+        R-types with 0 registers
+    
+    Returns
+    -------
+    bool
+        [Syntax correct or not]
+    """
     rd = instruction.destination_register
     rs = instruction.source_register
     rt = instruction.target_register
@@ -208,6 +249,18 @@ def validate_0_rtype(instruction) -> bool:
 
 
 def validate_2_itype(instruction) -> bool:
+    """Validates I-Type instructions with 2 registers 
+    
+    Parameters
+    ----------
+    instruction : I-Type
+        I-types with 2 registers
+    
+    Returns
+    -------
+    bool
+        [Syntax correct or not]
+    """
     destination = instruction.destination_register
     source = instruction.source_register
     immediate = instruction.immediate
@@ -215,24 +268,33 @@ def validate_2_itype(instruction) -> bool:
     check1 = destination is not None
     check2 = source is not None
     check3 = immediate is not None
-    print(instruction.immediate._value)
     if instruction.command in ("beq", "bne", "sll", "srl", "sra") and isinstance(
         immediate._value, str
     ):
-
         if destination.name in list_of_registers and source.name in list_of_registers:
             return check1 and check2 and check3
-    else:
-        if (
-            destination.name in list_of_registers
-            and isinstance(immediate(), int)
-            and source.name in list_of_registers
-        ):
-            return check1 and check2 and check3
+    elif (
+        destination.name in list_of_registers
+        and isinstance(immediate(), int)
+        and source.name in list_of_registers
+    ):
+        return check1 and check2 and check3
     return False
 
 
 def validate_optional_2_itype(instruction) -> bool:
+    """Validates I-Type instructions with optional 2 registers 
+    
+    Parameters
+    ----------
+    instruction : I-Type
+        I-types with 2 optional registers
+    
+    Returns
+    -------
+    bool
+        [Syntax correct or not]
+    """
     destination = instruction.destination_register
     target = instruction.target_register
     source = instruction.source_register
@@ -251,6 +313,18 @@ def validate_optional_2_itype(instruction) -> bool:
 
 
 def validate_1_itype(instruction) -> bool:
+    """Validates I-Type instructions with 1 registers 
+    
+    Parameters
+    ----------
+    instruction : I-Type
+        I-types with 1 registers
+    
+    Returns
+    -------
+    bool
+        [Syntax correct or not]
+    """
     destination = instruction.destination_register
     target = instruction.target_register
     immediate = instruction.immediate
@@ -267,6 +341,18 @@ def validate_1_itype(instruction) -> bool:
 
 
 def validate_jtype(instruction) -> bool:
+    """Validates J-Type instructions
+    
+    Parameters
+    ----------
+    instruction : J-Type
+        
+    
+    Returns
+    -------
+    bool
+        [Syntax correct or not]
+    """
     address = instruction.address
     check = address is not None
 

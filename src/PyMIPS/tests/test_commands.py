@@ -29,62 +29,180 @@ sll, srl, and sra are treated as I Types
 
 class TestRTypes(unittest.TestCase):
     def test_sllv(self):
-        # TODO: sllv
-        return
+        r = RType("sllv", "$t0", "$t1", "$t2")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t2 = RegisterPool.get_register("$t2")
+        t1.set_contents_from_int(123)
+        t2.set_contents_from_int(2)
+        r()
+        self.assertEqual(t0.get_contents_as_int(), 492)
 
     def test_srlv(self):
-        # TODO: srlv
-        return
+        r = RType("srlv", "$t0", "$t1", "$t2")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t2 = RegisterPool.get_register("$t2")
+        t1.set_contents_from_int(-16)
+        t2.set_contents_from_int(2)
+        r()
+        self.assertEqual(t0.get_contents_as_int(), -4)
 
     def test_srav(self):
-        # TODO: srav
-        return
+        r = RType("srav", "$t0", "$t1", "$t2")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t2 = RegisterPool.get_register("$t2")
+        t1.set_contents_from_int(-16)
+        t2.set_contents_from_int(2)
+        r()
+        self.assertEqual(t0.get_contents_as_int(), 1073741820)
 
     def test_jr(self):
-        pass
+        r = RType("jr", "$ra")
+        ra = RegisterPool.get_register("$ra")
+        pc = RegisterPool.get_register("pc")
+        ra.set_contents_from_int(263)
+        r()
+        self.assertEqual(pc.get_contents_as_int(), 263)
 
     def test_jalr(self):
-        pass
+        r = RType("jalr", "$t0")
+        ra = RegisterPool.get_register("$ra")
+        t0 = RegisterPool.get_register("$t0")
+        pc = RegisterPool.get_register("pc")
+        current = pc.get_contents_as_int()
+        t0.set_contents_from_int(444)
+        r()
+        self.assertEqual(pc.get_contents_as_int(), 444)
+        self.assertEqual(ra.get_contents_as_int(), current)
 
     def test_jalr_2_r(self):
-        pass
+        r = RType("jalr", "$t1", "$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t0 = RegisterPool.get_register("$t0")
+        pc = RegisterPool.get_register("pc")
+        current = pc.get_contents_as_int()
+        t0.set_contents_from_int(875)
+        r()
+        self.assertEqual(pc.get_contents_as_int(), 875)
+        self.assertEqual(t1.get_contents_as_int(), current)
 
     def test_syscall(self):
+        # TODO: Figure this out. Ommitting for now
         pass
+
+    def test_move(self):
+        r = RType("move", "$t1", "$t2")
+        t1 = RegisterPool.get_register("$t1")
+        t2 = RegisterPool.get_register("$t2")
+        t2.set_contents_from_int(8134)
+        r()
+        self.assertEqual(t1.get_contents_as_int(), 8134)
 
     def test_mfhi(self):
-        pass
+        r = RType("mfhi", "$t1")
+        t1 = RegisterPool.get_register("$t1")
+        hi = RegisterPool.get_register("hi")
+        hi.set_contents_from_int(280)
+        r()
+        self.assertEqual(t1.get_contents_as_int(), 280)
 
     def test_mthi(self):
-        pass
+        r = RType("mthi", "$t1")
+        t1 = RegisterPool.get_register("$t1")
+        t1.set_contents_from_int(342)
+        r()
+        hi = RegisterPool.get_register("hi")
+        self.assertEqual(hi.get_contents_as_int(), 342)
 
     def test_mflo(self):
-        pass
+        r = RType("mflo", "$t1")
+        t1 = RegisterPool.get_register("$t1")
+        lo = RegisterPool.get_register("lo")
+        lo.set_contents_from_int(423)
+        r()
+        self.assertEqual(t1.get_contents_as_int(), 423)
 
     def test_mtlo(self):
-        pass
+        r = RType("mtlo", "$t1")
+        t1 = RegisterPool.get_register("$t1")
+        t1.set_contents_from_int(564)
+        r()
+        lo = RegisterPool.get_register("lo")
+        self.assertEqual(lo.get_contents_as_int(), 564)
 
-    def test_mult(self):
-        pass
+    def test_mult_both_pos(self):
+        r = RType("mult", "$t0", "$t1")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t0.set_contents_from_int(651)
+        t1.set_contents_from_int(321)
+        r()
+        hi = RegisterPool.get_register("hi").get_contents_as_int()
+        lo = RegisterPool.get_register("lo").get_contents_as_int()
+        self.assertEqual(hi, 0)
+        self.assertEqual(lo, 208971)
+
+    def test_mult_one_neg(self):
+        r = RType("mult", "$t0", "$t1")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t0.set_contents_from_int(651)
+        t1.set_contents_from_int(-321)
+        r()
+        hi = RegisterPool.get_register("hi").get_contents_as_int()
+        lo = RegisterPool.get_register("lo").get_contents_as_int()
+        self.assertEqual(hi, -1)
+        self.assertEqual(lo, -208971)
+
+    def test_mult_both_neg(self):
+        r = RType("mult", "$t0", "$t1")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t0.set_contents_from_int(-651)
+        t1.set_contents_from_int(-321)
+        r()
+        hi = RegisterPool.get_register("hi").get_contents_as_int()
+        lo = RegisterPool.get_register("lo").get_contents_as_int()
+        self.assertEqual(hi, 0)
+        self.assertEqual(lo, 208971)
 
     def test_multu(self):
-        pass
+        r = RType("multu", "$t0", "$t1")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t0.set_contents_from_int(-651)
+        t1.set_contents_from_int(321)
+        r()
+        hi = RegisterPool.get_register("hi").get_contents_as_int()
+        lo = RegisterPool.get_register("lo").get_contents_as_int()
+        self.assertEqual(hi, 320)
+        self.assertEqual(lo, 208971)
 
     def test_div(self):
-        # r = RType("div", "$t0", "$t1")
-        # t0 = RegisterPool.get_register("$t0")
-        # t1 = RegisterPool.get_register("$t1")
-        # t0.set_contents_from_int(651)
-        # t1.set_contents_from_int(213)
-        # r()
-        # quo = RegisterPool.get_register("mflo")
-        # rem = RegisterPool.get_register("mfhi")
-        # self.assertEqual(quo, 3)
-        # self.assertEqual(rem, 12)
-        pass
+        r = RType("div", "$t0", "$t1")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t0.set_contents_from_int(651)
+        t1.set_contents_from_int(213)
+        r()
+        quo = RegisterPool.get_register("lo").get_contents_as_int()
+        rem = RegisterPool.get_register("hi").get_contents_as_int()
+        self.assertEqual(quo, 3)
+        self.assertEqual(rem, 12)
 
     def test_divu(self):
-        pass
+        r = RType("divu", "$t0", "$t1")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t0.set_contents_from_int(543)
+        t1.set_contents_from_int(432)
+        r()
+        quo = RegisterPool.get_register("lo").get_contents_as_int()
+        rem = RegisterPool.get_register("hi").get_contents_as_int()
+        self.assertEqual(quo, 1)
+        self.assertEqual(rem, 111)
 
     def test_add(self):
         r = RType("add", "$t0", "$t1", "$t3")
@@ -97,7 +215,14 @@ class TestRTypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), 10)
 
     def test_addu(self):
-        pass
+        r = RType("addu", "$t0", "$t1", "$t3")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t3 = RegisterPool.get_register("$t3")
+        t1.set_contents_from_int(2147483647)
+        t3.set_contents_from_int(1)
+        r()
+        self.assertEqual(t0.get_contents_as_unsigned_int(), 2147483648)
 
     def test_sub(self):
         r = RType("sub", "$t0", "$t1", "$t3")
@@ -110,7 +235,14 @@ class TestRTypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), 346)
 
     def test_subu(self):
-        pass
+        r = RType("subu", "$t0", "$t1", "$t3")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t3 = RegisterPool.get_register("$t3")
+        t1.set_contents_from_int(-2147483648)
+        t3.set_contents_from_int(1)
+        r()
+        self.assertEqual(t0.get_contents_as_int(), 2147483649)
 
     def test_and(self):
         r = RType("and", "$t0", "$s0", "$s1")
@@ -153,50 +285,270 @@ class TestRTypes(unittest.TestCase):
         self.assertEqual(t1.get_contents_as_int(), 192)
 
     def test_slt(self):
-        pass
+        r = RType("slt", "$t1", "$t2", "$t3")
+        t1 = RegisterPool.get_register("$t1")
+        t2 = RegisterPool.get_register("$t2")
+        t3 = RegisterPool.get_register("$t3")
+        t2.set_contents_from_int(2)
+        t3.set_contents_from_int(3)
+        r()
+        self.assertEqual(t1.get_contents_as_int(), 1)
 
     def test_sltu(self):
-        pass
+        r = RType("slt", "$t1", "$t2", "$t3")
+        t1 = RegisterPool.get_register("$t1")
+        t2 = RegisterPool.get_register("$t2")
+        t3 = RegisterPool.get_register("$t3")
+        t2.set_contents_from_int(-2147483649)
+        t3.set_contents_from_int(2147483651)
+        r()
+        self.assertEqual(t1.get_contents_as_int(), 1)
 
 
 class TestJTypes(unittest.TestCase):
-    pass
+    def test_jump(self):
+        Memory.reset()
+        DataHeap.reset()
+        ProgramStack.reset()
+        pc = RegisterPool.get_register("pc")
+        program = {
+            "main": [JType("j", "test"), BaseCommand(), BaseCommand(), BaseCommand()],
+            "test": [BaseCommand()],
+        }
+        ProgramStack.add_block_from_dict(program)
+        ProgramStack.jump_label("main")
+        ProgramStack.execute_next()
+        address = ProgramStack.get_label_addres("test")
+        self.assertEqual(pc.get_contents_as_int(), address)
+
+    def test_jal(self):
+        Memory.reset()
+        DataHeap.reset()
+        ProgramStack.reset()
+        pc = RegisterPool.get_register("pc")
+        ra = RegisterPool.get_register("$ra")
+        program = {
+            "main": [JType("j", "test"), BaseCommand(), BaseCommand(), BaseCommand()],
+            "test": [BaseCommand()],
+        }
+        ProgramStack.add_block_from_dict(program)
+        ProgramStack.jump_label("main")
+        current = pc.get_contents_as_int()
+        ProgramStack.execute_next()
+        address = ProgramStack.get_label_addres("test")
+        self.assertEqual(pc.get_contents_as_int(), address)
+        self.assertEqual(ra.get_contents_as_int(), current)
 
 
 class TestITypes(unittest.TestCase):
     def test_sll(self):
-        # TODO: sll
         i = IType("sll", "$t0", 2, "$t1")
         t0 = RegisterPool.get_register("$t0")
         t1 = RegisterPool.get_register("$t1")
         t1.set_contents_from_int(4)
         i()
-        # changed from 16 to 20 to test i-types that I am doing
         self.assertEqual(t0.get_contents_as_int(), 16)
 
     def test_srl(self):
-        # TODO: srl
-        return
+        i = IType("srl", "$t0", 4, "$t1")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t1.set_contents_from_int(123)
+        i()
+        self.assertEqual(t0.get_contents_as_int(), 1968)
 
     def test_sra(self):
-        # TODO: sra
-        return
+        i = IType("sra", "$t1", 4, "$s0")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$s0")
+        t1.set_contents_from_int(123)
+        i()
+        self.assertEqual(t0.get_contents_as_int(), 7)
 
-    def test_beq(self):
-        # TODO: ashton
-        return
+    def test_beq_true(self):
+        Memory.reset()
+        DataHeap.reset()
+        ProgramStack.reset()
+        pc = RegisterPool.get_register("pc")
+        t1 = RegisterPool.get_register("$t1")
+        t2 = RegisterPool.get_register("$t2")
+        program = {
+            "main": [
+                IType("beq", "$t1", "test", "$t2"),
+                BaseCommand(),
+                BaseCommand(),
+                BaseCommand(),
+            ],
+            "test": [BaseCommand()],
+        }
+        ProgramStack.add_block_from_dict(program)
+        t1.set_contents_from_int(100)
+        t2.set_contents_from_int(100)
+        ProgramStack.jump_label("main")
+        ProgramStack.execute_next()
+        address = ProgramStack.get_label_addres("test")
+        self.assertEqual(pc.get_contents_as_int(), address)
 
-    def test_bne(self):
-        # TODO: ashton
-        pass
+    def test_beq_false(self):
+        Memory.reset()
+        DataHeap.reset()
+        ProgramStack.reset()
+        pc = RegisterPool.get_register("pc")
+        t1 = RegisterPool.get_register("$t1")
+        t2 = RegisterPool.get_register("$t2")
+        program = {
+            "main": [
+                IType("beq", "$t1", "test", "$t2"),
+                BaseCommand(),
+                BaseCommand(),
+                BaseCommand(),
+            ],
+            "test": [BaseCommand()],
+        }
+        ProgramStack.add_block_from_dict(program)
+        t1.set_contents_from_int(100)
+        t2.set_contents_from_int(200)
+        ProgramStack.jump_label("main")
+        next_i = pc.get_contents_as_int() + 4
+        ProgramStack.execute_next()
+        self.assertEqual(pc.get_contents_as_int(), next_i)
 
-    def test_blez(self):
-        # TODO: ashton
-        pass
+    def test_bne_true(self):
+        Memory.reset()
+        DataHeap.reset()
+        ProgramStack.reset()
+        pc = RegisterPool.get_register("pc")
+        t1 = RegisterPool.get_register("$t1")
+        t2 = RegisterPool.get_register("$t2")
+        program = {
+            "main": [
+                IType("bne", "$t1", "test", "$t2"),
+                BaseCommand(),
+                BaseCommand(),
+                BaseCommand(),
+            ],
+            "test": [BaseCommand()],
+        }
+        ProgramStack.add_block_from_dict(program)
+        t1.set_contents_from_int(100)
+        t2.set_contents_from_int(200)
+        ProgramStack.add_block_from_dict(program)
+        ProgramStack.jump_label("main")
+        ProgramStack.execute_next()
+        address = ProgramStack.get_label_addres("test")
+        self.assertEqual(pc.get_contents_as_int(), address)
 
-    def test_bgtz(self):
-        # TODO: ashton
-        pass
+    def test_bne_false(self):
+        Memory.reset()
+        DataHeap.reset()
+        ProgramStack.reset()
+        pc = RegisterPool.get_register("pc")
+        t1 = RegisterPool.get_register("$t1")
+        t2 = RegisterPool.get_register("$t2")
+        program = {
+            "main": [
+                IType("bne", "$t1", "test", "$t2"),
+                BaseCommand(),
+                BaseCommand(),
+                BaseCommand(),
+            ],
+            "test": [BaseCommand()],
+        }
+        ProgramStack.add_block_from_dict(program)
+        t1.set_contents_from_int(100)
+        t2.set_contents_from_int(100)
+        ProgramStack.jump_label("main")
+        next_i = pc.get_contents_as_int() + 4
+        ProgramStack.execute_next()
+        self.assertEqual(pc.get_contents_as_int(), next_i)
+
+    def test_blez_true(self):
+        Memory.reset()
+        DataHeap.reset()
+        ProgramStack.reset()
+        pc = RegisterPool.get_register("pc")
+        t1 = RegisterPool.get_register("$t1")
+        program = {
+            "main": [
+                IType("blez", "$t1", "test"),
+                BaseCommand(),
+                BaseCommand(),
+                BaseCommand(),
+            ],
+            "test": [BaseCommand()],
+        }
+        ProgramStack.add_block_from_dict(program)
+        t1.set_contents_from_int(0)
+        ProgramStack.jump_label("main")
+        ProgramStack.execute_next()
+        address = ProgramStack.get_label_addres("test")
+        self.assertEqual(pc.get_contents_as_int(), address)
+
+    def test_blez_false(self):
+        Memory.reset()
+        DataHeap.reset()
+        ProgramStack.reset()
+        pc = RegisterPool.get_register("pc")
+        t1 = RegisterPool.get_register("$t1")
+        program = {
+            "main": [
+                IType("blez", "$t1", "test"),
+                BaseCommand(),
+                BaseCommand(),
+                BaseCommand(),
+            ],
+            "test": [BaseCommand()],
+        }
+        ProgramStack.add_block_from_dict(program)
+        t1.set_contents_from_int(100)
+        ProgramStack.jump_label("main")
+        next_i = pc.get_contents_as_int() + 4
+        ProgramStack.execute_next()
+        self.assertEqual(pc.get_contents_as_int(), next_i)
+
+    def test_bgtz_true(self):
+        Memory.reset()
+        DataHeap.reset()
+        ProgramStack.reset()
+        pc = RegisterPool.get_register("pc")
+        t1 = RegisterPool.get_register("$t1")
+        program = {
+            "main": [
+                IType("bgtz", "$t1", "test"),
+                BaseCommand(),
+                BaseCommand(),
+                BaseCommand(),
+            ],
+            "test": [BaseCommand()],
+        }
+        ProgramStack.add_block_from_dict(program)
+        t1.set_contents_from_int(12)
+        ProgramStack.jump_label("main")
+        ProgramStack.execute_next()
+        address = ProgramStack.get_label_addres("test")
+        self.assertEqual(pc.get_contents_as_int(), address)
+
+    def test_bgtz_false(self):
+        Memory.reset()
+        DataHeap.reset()
+        ProgramStack.reset()
+        pc = RegisterPool.get_register("pc")
+        t1 = RegisterPool.get_register("$t1")
+        program = {
+            "main": [
+                IType("bgtz", "$t1", "test"),
+                BaseCommand(),
+                BaseCommand(),
+                BaseCommand(),
+            ],
+            "test": [BaseCommand()],
+        }
+        ProgramStack.add_block_from_dict(program)
+        t1.set_contents_from_int(-100)
+        ProgramStack.jump_label("main")
+        next_i = pc.get_contents_as_int() + 4
+        ProgramStack.execute_next()
+        self.assertEqual(pc.get_contents_as_int(), next_i)
 
     def test_addi(self):
         i = IType("addi", "$t0", immediate=10, source="$t1")
@@ -207,13 +559,28 @@ class TestITypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), 20)
 
     def test_addiu(self):
-        pass
+        i = IType("addiu", "$t0", immediate=2147483647, source="$t1")
+        t0 = RegisterPool.get_register("$t0")
+        t1 = RegisterPool.get_register("$t1")
+        t1.set_contents_from_int(1)
+        i()
+        self.assertEqual(t0.get_contents_as_int(), -1)
 
     def test_slti(self):
-        pass
+        r = IType("slti", "$t1", 1, "$t2")
+        t1 = RegisterPool.get_register("$t1")
+        t2 = RegisterPool.get_register("$t2")
+        t2.set_contents_from_int(2)
+        r()
+        self.assertEqual(t1.get_contents_as_int(), 0)
 
     def test_sltiu(self):
-        pass
+        r = IType("slti", "$t1", 2147483649, "$t2")
+        t1 = RegisterPool.get_register("$t1")
+        t2 = RegisterPool.get_register("$t2")
+        t2.set_contents_from_int(3147483649)
+        r()
+        self.assertEqual(t1.get_contents_as_int(), 1)
 
     def test_andi(self):
         i = IType("andi", "$t0", 79, "$t1")
@@ -240,7 +607,11 @@ class TestITypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), 932)
 
     def test_lui(self):
-        pass
+        i = IType("lui", "$t1", 100)
+        t1 = RegisterPool.get_register("$t1")
+        t1.set_contents_from_int(0)
+        i()
+        self.assertEqual(6553600, t1.get_contents_as_int())
 
     def test_lb(self):
         Memory.reset()
@@ -254,9 +625,15 @@ class TestITypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), res)
 
     def test_lh(self):
-        pass
+        Memory.reset()
+        DataStack.store_word(4, 0x7744)
+        i = IType("lh", "$t0", 4, "$sp")
+        i()
+        t0 = RegisterPool.get_register("$t0")
+        self.assertEqual(t0.get_contents_as_int(), 0x44)
 
     def test_lw(self):
+        # TODO: Not sure if this is correct
         Memory.reset()
         DataStack.alloc(1024)
         DataStack.store_word(4, 1203)
@@ -266,13 +643,34 @@ class TestITypes(unittest.TestCase):
         self.assertEqual(t0.get_contents_as_int(), 1203)
 
     def test_lbu(self):
-        pass
+        Memory.reset()
+        DataStack.alloc(1024)
+        i = IType("lbu", "$t0", -100, "$sp")
+        t0 = RegisterPool.get_register("$t0")
+        t0.set_contents_from_int(0)
+        i()
+        self.assertEqual(t0.get_contents_as_int(), 156)
 
     def test_sb(self):
-        pass
+        Memory.reset()
+        DataStack.alloc(1024)
+        i = IType("sb", "$t0", 10, "$s1")
+        t0 = RegisterPool.get_register("$t0")
+        t0.set_contents_from_int(37271)
+        s1 = RegisterPool.get_register("$s1")
+        s1.set_contents_from_int(300)
+        i()
+        self.assertEqual(Memory.get_byte(310), 151)  # Not sure if signed or unsigned
 
     def test_sh(self):
-        pass
+        Memory.reset()
+        DataStack.alloc(1024)
+        i = IType("sh", "$t1", 0, ("$sp"))
+        t1 = RegisterPool.get_register("$t1")
+        t1.set_contents_from_int(0x4477)
+        i()
+        res = DataStack.load_word(0, "$sp")
+        self.assertEqual(res, 0x77)
 
     def test_sw_stack(self):
         Memory.reset()

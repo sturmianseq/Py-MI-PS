@@ -4,7 +4,7 @@ from PyMIPS.AST.validator import validate
 
 
 class BaseCommand:
-    def __init__(self, command_str: str):
+    def __init__(self, command_str="BASE"):
         """Base Command Class
         move $dest, $source
         add $dest, $source, $targ

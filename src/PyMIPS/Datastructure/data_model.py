@@ -277,9 +277,8 @@ class ProgramStack:
     def execute_next():
         next_inst = ProgramStack.__pc.get_contents_as_int()
         ProgramStack.execute_instruction(next_inst)
-        next_inst = ProgramStack.__pc.get_contents_as_int()
-        next_inst += 4
-        ProgramStack.__pc.set_contents_from_int(next_inst)
+        if next_inst == ProgramStack.__pc.get_contents_as_int():
+            ProgramStack.__pc.set_contents_from_int(next_inst + 4)
 
     @staticmethod
     def add_label(label):

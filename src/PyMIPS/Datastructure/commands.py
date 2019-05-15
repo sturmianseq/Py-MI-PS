@@ -10,36 +10,233 @@ from PyMIPS.Datastructure.memory import Memory
 
 
 def get_command(ast_class):
-    return {
-        "li": li_command,
-        "lw": lw_command,
-        "sw": sw_command,
-        "add": add_command,
-        "sub": sub_command,
-        "syscall": syscall_command,
-        "mflo": mflo_command,
-        "mfhi": mfhi_command,
-        "div": div_command,
-        "move": move_command,
-        "addi": addi_command,
-        "la": la_command,
-        "beq": beq_command,
-        "j": j_command,
-        "jal": jal_command,
-        "mul": mul_command,
-        "jr": jr_command,
-        "lb": lb_command,
-        "addu": addu_command,
-        "xor": xor_command,
-        "and": and_command,
-        "bltz": bltz_command,
-        "subu": subu_command,
-        "not": not_command,
-        "mult": mult_command,
-        "beqz": beqz_command,
-        "bne": bne_command,
-        "bnez": bnez_command,
-    }[ast_class.command](ast_class)
+    try:
+        return {
+            "li": li_command,
+            "lw": lw_command,
+            "sw": sw_command,
+            "add": add_command,
+            "sub": sub_command,
+            "syscall": syscall_command,
+            "mflo": mflo_command,
+            "mfhi": mfhi_command,
+            "div": div_command,
+            "move": move_command,
+            "addi": addi_command,
+            "la": la_command,
+            "beq": beq_command,
+            "j": j_command,
+            "jal": jal_command,
+            "mul": mul_command,
+            "jr": jr_command,
+            "lb": lb_command,
+            "addu": addu_command,
+            "xor": xor_command,
+            "and": and_command,
+            "bltz": bltz_command,
+            "subu": subu_command,
+            "not": not_command,
+            "mult": mult_command,
+            "beqz": beqz_command,
+            "bne": bne_command,
+            "bnez": bnez_command,
+            "or": or_command,
+            # Unimplemented r-types
+            "nor": nor_command,
+            "srl": srl_command,
+            "srlv": srlv_command,
+            "sllv": sllv_command,
+            "sll": sll_command,
+            "slt": slt_command,
+            "sltu": sltu_command,
+            "sra": sra_command,
+            "srav": srav_command,
+            "divu": unimplemented,
+            "jalr": unimplemented,
+            "multu": unimplemented,
+            "mthi": mthi_command,
+            "mtlo": mtlo_command,
+            "madd": unimplemented,
+            "maddu":unimplemented,
+            "msub": unimplemented,
+            "msubu": unimplemented,
+            "nop": unimplemented,
+            # Unimplemented i-types
+            "addiu": addi_command,
+            "andi": andi_command,
+            "bgez": unimplemented,
+            "blez": blez_command,
+            "bgtz": bgtz_command,
+            "lbu": lbu_command,
+            "lh": lh_command,
+            "lhu": unimplemented,
+            "lui": lui_command,
+            "ori": ori_command,
+            "sb": sb_command,
+            "slti": slti_command,
+            "sltiu": sltiu_command,
+            "sh": sh_command,
+            "xori": xori_command,
+            "ll": unimplemented,
+            "sc": unimplemented,
+            "swl": unimplemented,
+            "tgei": unimplemented,
+            "teqi": unimplemented,
+            "tgeiu": unimplemented,
+            "tlti": unimplemented,
+            "tltiu": unimplemented,
+            "tnei": unimplemented,
+        }[ast_class.command](ast_class)
+    except Exception as e:
+        print(e)
+        return unimplemented(ast_class)
+
+
+def lui_command(command):
+    def exe():
+        imm = command.immediate()
+        b = imm.to_bytes(4, "big", signed=True)
+        res = int.from_bytes(b[:2], "big", signed=False)
+        command.destination_register.set_contents_from_int(res)
+
+    return exe
+
+
+def mtlo_command(command):
+    def exe():
+        lo = RegisterPool.get_register("lo")
+        dest = command.destination_register.get_contents_as_bytes()
+        lo.set_contents_from_bytes(dest)
+
+    return exe
+
+
+def mthi_command(command):
+    def exe():
+        hi = RegisterPool.get_register("hi")
+        dest = command.destination_register.get_contents_as_bytes()
+        hi.set_contents_from_bytes(dest)
+
+    return exe
+
+
+def sb_command(command):
+    def exe():
+        dest = command.destination_register.get_contents_as_int()
+        offset = command.immediate()
+        source = command.source_register
+        b = dest.to_bytes(4, "big", signed=True)
+        i = int.from_bytes(b[-1:], "big", signed=False)
+        print(i)
+        DataStack.store_word(offset, i, source.name)
+
+    return exe
+
+
+def sh_command(command):
+    def exe():
+        dest = command.destination_register.get_contents_as_int()
+        offset = command.immediate()
+        source = command.source_register
+        b = dest.to_bytes(4, "big", signed=True)
+        i = int.from_bytes(b[-2:], "big", signed=False)
+        DataStack.store_word(offset, i, source.name)
+
+    return exe
+
+
+def lh_command(command):
+    def exe():
+        destination = command.destination_register
+        address = command.source_register.get_contents_as_int() + command.immediate()
+        res = Memory.get_word(address)
+        b = res.to_bytes(4, "big", signed=True)
+        res = int.from_bytes(b[-2:], "big", signed=False)
+        destination.set_contents_from_int(res)
+
+    return exe
+
+
+def sll_command(command):
+    def exe():
+        amount = command.immediate()
+        source = command.source_register.get_contents_as_unsigned_int()
+        dest = command.destination_register
+
+        res = source << amount
+        dest.set_contents_from_int(res)
+
+    return exe
+
+
+def sllv_command(command):
+    def exe():
+        amount = command.target_register.get_contents_as_int()
+        source = command.source_register.get_contents_as_unsigned_int()
+        dest = command.destination_register
+
+        res = source << amount
+        dest.set_contents_from_int(res)
+
+    return exe
+
+
+def slt_command(command):
+    def exe():
+        target = command.target_register.get_contents_as_int()
+        comp = command.source_register.get_contents_as_int()
+        dest = command.destination_register
+        if target > comp:
+            dest.set_contents_from_int(1)
+        else:
+            dest.set_contents_from_int(0)
+
+    return exe
+
+
+def sltu_command(command):
+    def exe():
+        target = command.target_register.get_contents_as_unsigned_int()
+        comp = command.source_register.get_contents_as_unsigned_int()
+        dest = command.destination_register
+        if target > comp:
+            dest.set_contents_from_int(1)
+        else:
+            dest.set_contents_from_int(0)
+
+    return exe
+
+
+def slti_command(command):
+    def exe():
+        imm = command.immediate()
+        comp = command.source_register.get_contents_as_int()
+        dest = command.destination_register
+        if comp < imm:
+            dest.set_contents_from_int(1)
+        else:
+            dest.set_contents_from_int(0)
+
+    return exe
+
+
+def sltiu_command(command):
+    def exe():
+        imm = command.immediate()
+        b = imm.to_bytes(2, "big", signed=True)
+        try:
+            b = imm.to_bytes(2, "big", signed=True)
+        except:
+            raise Exception(f"sltui failed. Immediate must fit in 16 bits: {imm}")
+        imm = int.from_bytes(b, "big", signed=False)
+        comp = command.source_register.get_contents_as_unsigned_int()
+        dest = command.destination_register
+        if comp < imm:
+            dest.set_contents_from_int(1)
+        else:
+            dest.set_contents_from_int(0)
+
+    return exe
 
 
 def not_command(command):
@@ -52,11 +249,75 @@ def not_command(command):
     return exe
 
 
+def sra_command(command):
+    def exe():
+        amount = command.immediate()
+        source = command.source_register.get_contents_as_unsigned_int()
+        dest = command.destination_register
+
+        res = source >> amount
+        dest.set_contents_from_int(res)
+
+    return exe
+
+
+def srav_command(command):
+    def exe():
+        amount = command.target_register.get_contents_as_int()
+        source = command.source_register.get_contents_as_unsigned_int()
+        dest = command.destination_register
+
+        res = source >> amount
+        dest.set_contents_from_int(res)
+
+    return exe
+
+
+def srl_command(command):
+    from PyMIPS.Datastructure.math_utils import logical_rshift
+
+    def exe():
+        amount = command.immediate()
+        source = command.source_register.get_contents_as_unsigned_int()
+        dest = command.destination_register
+
+        res = logical_rshift(source, amount)
+        dest.set_contents_from_int(res)
+
+    return exe
+
+
+def srlv_command(command):
+    from PyMIPS.Datastructure.math_utils import logical_rshift
+
+    def exe():
+        amount = command.target_register.get_contents_as_int()
+        source = command.source_register.get_contents_as_unsigned_int()
+        print(source)
+        dest = command.destination_register
+
+        res = logical_rshift(source, amount)
+        dest.set_contents_from_int(res)
+
+    return exe
+
+
 def lb_command(command):
     def exe():
         destination = command.destination_register
         address = command.source_register.get_contents_as_int()
         res = Memory.get_byte(address)
+        destination.set_contents_from_int(res)
+
+    return exe
+
+
+def lbu_command(command):
+    def exe():
+        destination = command.destination_register
+        address = command.source_register.get_contents_as_int() + command.immediate()
+        b = Memory.get_word(address).to_bytes(4, "big", signed=True)
+        res = int.from_bytes(b[-1:], "big", signed=False)
         destination.set_contents_from_int(res)
 
     return exe
@@ -73,12 +334,67 @@ def xor_command(command):
     return exe
 
 
+def nor_command(command):
+    def exe():
+        destination = command.destination_register
+        source = command.source_register.get_contents_as_bytes()
+        target = command.target_register.get_contents_as_bytes()
+        res = [(a | b) ^ 0b11111111 for (a, b) in zip(source, target)]
+        destination.set_contents_from_bytes(res)
+
+    return exe
+
+
+def xori_command(command):
+    def exe():
+        destination = command.destination_register
+        source = command.source_register.get_contents_as_bytes()
+        immediate = command.immediate().to_bytes(5, "big", signed=True)
+        res = [a ^ b for (a, b) in zip(source, immediate[-4:])]
+        destination.set_contents_from_bytes(res)
+
+    return exe
+
+
 def and_command(command):
     def exe():
         destination = command.destination_register
         source = command.source_register.get_contents_as_bytes()
         target = command.target_register.get_contents_as_bytes()
         res = [a & b for (a, b) in zip(source, target)]
+        destination.set_contents_from_bytes(res)
+
+    return exe
+
+
+def andi_command(command):
+    def exe():
+        destination = command.destination_register
+        source = command.source_register.get_contents_as_bytes()
+        immediate = command.immediate().to_bytes(5, "big", signed=True)
+        res = [a & b for (a, b) in zip(source, immediate[-4:])]
+        destination.set_contents_from_bytes(res)
+
+    return exe
+
+
+def or_command(command):
+    def exe():
+        destination = command.destination_register
+        source = command.source_register.get_contents_as_bytes()
+        target = command.target_register.get_contents_as_bytes()
+        res = [a | b for (a, b) in zip(source, target)]
+        destination.set_contents_from_bytes(res)
+
+    return exe
+
+
+def ori_command(command):
+    def exe():
+        destination = command.destination_register
+        source = command.source_register.get_contents_as_bytes()
+        immediate = command.immediate().to_bytes(5, "big", signed=True)
+        res = [a | b for (a, b) in zip(source, immediate[-4:])]
         destination.set_contents_from_bytes(res)
 
     return exe
@@ -96,8 +412,8 @@ def addi_command(command):
 
 def mul_command(command):
     def exe():
-        mfhi = RegisterPool.get_register("mfhi")
-        mflo = RegisterPool.get_register("mflo")
+        mfhi = RegisterPool.get_register("hi")
+        mflo = RegisterPool.get_register("lo")
         dest = command.destination_register
         source = command.source_register
         target = command.target_register
@@ -116,8 +432,8 @@ def mul_command(command):
 
 def mult_command(command):
     def exe():
-        mfhi = RegisterPool.get_register("$mfhi")
-        mflo = RegisterPool.get_register("$mflo")
+        mfhi = RegisterPool.get_register("hi")
+        mflo = RegisterPool.get_register("lo")
         dest = command.destination_register
         source = command.source_register
 
@@ -125,10 +441,8 @@ def mult_command(command):
         r = result.to_bytes(12, "big", signed=True)
         hi = r[-8:-4]
         low = r[-4:]
-        assert len(hi) == len(low)
         mfhi.set_contents_from_bytes(hi)
         mflo.set_contents_from_bytes(low)
-        print(mflo, mfhi)
 
     return exe
 
@@ -136,7 +450,6 @@ def mult_command(command):
 def j_command(command):
     def exe():
         ProgramStack.jump_label(command.address)
-        ProgramStack.move_pc(-4)
 
     return exe
 
@@ -144,21 +457,22 @@ def j_command(command):
 def jr_command(command):
     def exe():
         dest = command.destination_register.get_contents_as_int()
-        pc = RegisterPool.get_register("$pc")
-        pc.set_contents_from_int(dest - 4)
+        pc = RegisterPool.get_register("pc")
+        pc.set_contents_from_int(dest)
 
     return exe
 
 
 def jal_command(command):
     def exe():
-        pc = RegisterPool.get_register("$pc").get_contents_as_int()
+        pc = RegisterPool.get_register("pc").get_contents_as_int()
         ra = RegisterPool.get_register("$ra")
         ra.set_contents_from_int(pc + 4)
         ProgramStack.jump_label(command.address)
-        ProgramStack.move_pc(-4)
 
     return exe
+
+
 
 
 def addu_command(command):
@@ -169,6 +483,7 @@ def addu_command(command):
         s = int.from_bytes(source, "big", signed=False)
         t = int.from_bytes(target, "big", signed=False)
         res = s + t
+        print(res)
         dest.set_contents_from_int(res)
 
     return exe
@@ -193,7 +508,6 @@ def beq_command(command):
         source = command.source_register.get_contents_as_int()
         if dest == source:
             ProgramStack.jump_label(command.immediate._value)
-            ProgramStack.move_pc(-4)
 
     return exe
 
@@ -204,7 +518,6 @@ def bne_command(command):
         source = command.source_register.get_contents_as_int()
         if dest != source:
             ProgramStack.jump_label(command.immediate._value)
-            ProgramStack.move_pc(-4)
 
     return exe
 
@@ -214,7 +527,6 @@ def bnez_command(command):
         dest = command.destination_register.get_contents_as_int()
         if dest != 0:
             ProgramStack.jump_label(command.immediate._value)
-            ProgramStack.move_pc(-4)
 
     return exe
 
@@ -224,7 +536,24 @@ def bltz_command(command):
         dest = command.destination_register.get_contents_as_int()
         if dest < 0:
             ProgramStack.jump_label(command.immediate._value)
-            ProgramStack.move_pc(-4)
+
+    return exe
+
+
+def blez_command(command):
+    def exe():
+        dest = command.destination_register.get_contents_as_int()
+        if dest <= 0:
+            ProgramStack.jump_label(command.immediate._value)
+
+    return exe
+
+
+def bgtz_command(command):
+    def exe():
+        dest = command.destination_register.get_contents_as_int()
+        if dest >= 0:
+            ProgramStack.jump_label(command.immediate._value)
 
     return exe
 
@@ -234,7 +563,6 @@ def beqz_command(command):
         dest = command.destination_register.get_contents_as_int()
         if dest == 0:
             ProgramStack.jump_label(command.immediate._value)
-            ProgramStack.move_pc(-4)
 
     return exe
 
@@ -253,7 +581,7 @@ def la_command(command):
 
 def unimplemented(command):
     def exe():
-        print(f"UNIMPLEMENTED {command}")
+        print(f"{command.command} is unimplemented. Skipping...")
 
     return exe
 
@@ -293,8 +621,7 @@ def lw_command(command):
 
 def mflo_command(command):
     def exe():
-        mflo = RegisterPool.get_register("$mflo")
-        print(mflo)
+        mflo = RegisterPool.get_register("lo")
         command.destination_register.set_contents_from_bytes(
             mflo.get_contents_as_bytes()
         )
@@ -304,7 +631,7 @@ def mflo_command(command):
 
 def mfhi_command(command):
     def exe():
-        mfhi = RegisterPool.get_register("$mfhi")
+        mfhi = RegisterPool.get_register("hi")
         command.destination_register.set_contents_from_bytes(
             mfhi.get_contents_as_bytes()
         )
@@ -315,17 +642,17 @@ def mfhi_command(command):
 def div_command(command):
     def exe():
         quotient_res = (
-            command.source_register.get_contents()
-            // command.destination_register.get_contents()
+            command.destination_register.get_contents_as_int()
+            // command.source_register.get_contents_as_int()
         )
         remainder_res = (
-            command.source_register.get_contents()
-            % command.destination_register.get_contents()
+            command.destination_register.get_contents_as_int()
+            % command.source_register.get_contents_as_int()
         )
-        mfhi = RegisterPool.get_register("$mfhi")
-        mflo = RegisterPool.get_register("$mflo")
-        mfhi.set_contents(lambda: remainder_res)
-        mflo.set_contents(lambda: quotient_res)
+        mfhi = RegisterPool.get_register("hi")
+        mflo = RegisterPool.get_register("lo")
+        mfhi.set_contents_from_int(remainder_res)
+        mflo.set_contents_from_int(quotient_res)
 
     return exe
 

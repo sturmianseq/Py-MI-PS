@@ -50,6 +50,9 @@ class Register:
     def get_contents_as_int(self):
         return int.from_bytes(self.__contents, "big", signed=True)
 
+    def get_contents_as_unsigned_int(self):
+        return int.from_bytes(self.__contents, "big", signed=False)
+
     def get_contents_as_bytes(self):
         return self.__contents
 
@@ -230,7 +233,7 @@ class ProgramStack:
     __labels = {}
     __instructions = {}
     __next_address = 0
-    __pc = create_register("$pc")
+    __pc = create_register("pc")
 
     @staticmethod
     def reset():
@@ -238,6 +241,12 @@ class ProgramStack:
         ProgramStack.__instructions.clear()
         ProgramStack.__next_address = 0
         ProgramStack.__program_counter = 0
+
+    @staticmethod
+    def get_label_addres(label: str) -> int:
+        if label not in ProgramStack.__labels:
+            raise Exception(f"Invalid label {label}")
+        return ProgramStack.__labels[label]
 
     @staticmethod
     def move_pc(amount: int):
@@ -268,9 +277,8 @@ class ProgramStack:
     def execute_next():
         next_inst = ProgramStack.__pc.get_contents_as_int()
         ProgramStack.execute_instruction(next_inst)
-        next_inst = ProgramStack.__pc.get_contents_as_int()
-        next_inst += 4
-        ProgramStack.__pc.set_contents_from_int(next_inst)
+        if next_inst == ProgramStack.__pc.get_contents_as_int():
+            ProgramStack.__pc.set_contents_from_int(next_inst + 4)
 
     @staticmethod
     def add_label(label):
@@ -285,3 +293,9 @@ class ProgramStack:
         for l in block.contents:
             ProgramStack.add_label(l)
 
+    @staticmethod
+    def add_block_from_dict(block: dict):
+        for key in block:
+            ProgramStack.__labels[key] = ProgramStack.__next_address
+            for inst in block[key]:
+                ProgramStack.add_instruction(inst)

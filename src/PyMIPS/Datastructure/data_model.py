@@ -84,6 +84,10 @@ class RegisterPool:
             RegisterPool.__registers[name] = reg
             return reg
 
+    @staticmethod
+    def reset():
+        RegisterPool.__registers = {"$zero": Register("$zero")}
+
 
 def create_immediate(value) -> Immediate:
     try:
